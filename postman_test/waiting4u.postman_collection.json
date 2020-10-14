@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c6977167-3efd-46c6-9ba0-f8bee4f65290",
+		"_postman_id": "1becf037-ddc7-490f-9693-553d772acde4",
 		"name": "waiting4u",
 		"description": "In order to run this collection, you need an environment which has the following 3 environment variables pre-defined:\n\napp_url\n- Set this to your app. E.g., when running locally set it to http://localhost:3000. When running the app on GCP. set it to https://waiting4u.com\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -12,19 +12,19 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "9eb8a42f-d59c-4daf-9ac7-8e8b008c937b",
+						"id": "16eceae8-b00a-444a-903c-f0f97937edd2",
 						"exec": [
-							"pm.environment.set(\"admin_id1\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"admin1_id\", pm.response.json()[\"id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
 							"});",
 							"",
-							"",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin1\");",
 							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});",
@@ -66,9 +66,9 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fa44e0bf-a71d-4874-a60e-0f09d14e57cc",
+						"id": "21ce9450-d5c1-4615-b76b-ffe174813778",
 						"exec": [
-							"pm.environment.set(\"admin_id2\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"admin2_id\", pm.response.json()[\"id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -79,6 +79,7 @@
 							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin2\");",
 							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin2@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});",
@@ -120,7 +121,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fb13e22c-414e-470e-a549-de879d4e7155",
+						"id": "120b21ef-91b0-4218-b012-5e6e504f3d1e",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -167,7 +168,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "87e5a109-5d0c-43b5-a22f-25b2180a7637",
+						"id": "6fdd4d30-61da-4503-a94b-c8ec97623ab0",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -214,7 +215,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bbded4df-a29a-4894-b800-402b3a0c11cf",
+						"id": "44f2a08b-5b99-49db-a60e-54a5984e8ff9",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -261,7 +262,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e9c78307-5366-4209-b5f5-adddee3a715d",
+						"id": "d9c5d19b-1860-4006-b150-149fc4ab8f8e",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -308,7 +309,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "572d3598-4154-4147-87e8-825ad744db32",
+						"id": "524cacc2-ed68-4ebf-936c-2cbfd99660b7",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -355,7 +356,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "747df9dd-54e7-4cab-b015-913d9a915086",
+						"id": "8082c367-ff0f-43aa-add7-b725597df126",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -402,7 +403,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "047f625a-94c7-492f-aac2-842489c68d5b",
+						"id": "8b61efe4-32e6-4846-aee1-fb252f873b0d",
 						"exec": [
 							"pm.test(\"400 status code\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -444,12 +445,59 @@
 			"response": []
 		},
 		{
+			"name": "add admin with password missing lowercase 400 Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ad06a7e-4a72-466e-9f3a-a807f4a9b377",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin3\",\r\n   \"password\":\"PASSWORD123\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add admin with duplicate name 403",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "f4a7f788-e8b0-4b88-8086-473d6f8c50b7",
+						"id": "23f371e5-a85a-4aca-965c-8aa6cd6892ab",
 						"exec": [
 							"pm.test(\"403 status code\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -496,7 +544,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "55724438-4f3b-4162-ae99-f290b92007ad",
+						"id": "17cc43ce-6b77-4b59-b087-a6f8635956bb",
 						"exec": [
 							"pm.test(\"403 status code\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -538,25 +586,32 @@
 			"response": []
 		},
 		{
-			"name": "delete admin1 204",
+			"name": "get admin1 200",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "1956e3c4-b89d-4441-b04a-d94653e33062",
+						"id": "4ef02f24-2de1-49e4-baf5-6063500b01a4",
 						"exec": [
-							"pm.test(\"204 no content\", function () {",
-							"    pm.response.to.have.status(204);",
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.environment.unset(\"admin1_id\");"
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin1\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
 						],
 						"type": "text/javascript"
 					}
 				}
 			],
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
 					"raw": "{{app_url}}/admins/{{admin1_id}}",
@@ -572,18 +627,824 @@
 			"response": []
 		},
 		{
-			"name": "delete admin2 204",
+			"name": "add user1 201",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "485205f8-0531-412b-864a-5baef62b6812",
+						"id": "8827e03e-a3e5-4faa-b839-498afa6f5d4a",
+						"exec": [
+							"pm.environment.set(\"user1_id\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user1\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user2 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c2c647a1-4511-47fd-81af-e58a3ce43231",
+						"exec": [
+							"pm.environment.set(\"user2_id\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user2@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user2\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user2@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with too short name 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3549f66a-3539-4d6f-b490-905650a5c2c7",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Name should be 3 to 12 characters, letters and numbers only\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"us\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with too short password 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b30f31-362a-40f8-8dd4-f9cd44a5a123",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"1234567\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with too long name 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d62247b3-49fc-4b22-a768-dfb31f6e2327",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Name should be 3 to 12 characters, letters and numbers only\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"1234567890123\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with too long password 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b4070c36-03c4-49e9-9c88-db33210f9ab4",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"12345678901234567\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with invalid chars in name 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e5040e56-18bb-4bab-a889-a0668df8c81c",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Name should be 3 to 12 characters, letters and numbers only\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user 1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with password missing number 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cb6c3ebe-8b08-4698-aed5-24b3aed8a79f",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"Password\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with password missing Uppercase 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1f8dc52b-fde8-4625-ba21-f71a0584b0c2",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"password123\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with password missing lowercase 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e7b0782-8c17-4333-b449-b24a830b9337",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"PASSWORD123\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with duplicate name 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "75618c81-0570-49d6-bf0b-4776c7539954",
+						"exec": [
+							"pm.test(\"403 status code\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"403 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The name already exists, please use another one\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user2@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user with duplicate email 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e5b3b315-82bb-4057-9935-a603f209a64f",
+						"exec": [
+							"pm.test(\"403 status code\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"403 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The email already exists, please use another one\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user1 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00a9938b-1075-4869-af43-5d095e3e6e91",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user1\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add pet1 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96a1db63-daa4-4886-a197-119f8ede4d51",
+						"exec": [
+							"pm.environment.set(\"pet1_id\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"pet_name\"]).to.eq(\"pet1\");",
+							"    pm.expect(pm.response.json()[\"data_of_birth\"]).to.eq(\"1-Sep-2020\");",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"dog\");",
+							"    pm.expect(pm.response.json()[\"breed\"]).to.eq(\"husky\");",
+							"    pm.expect(pm.response.json()[\"status\"]).to.eq(\"just had a bath\");",
+							"    pm.expect(pm.response.json()[\"zip_code\"]).to.eq(\"98029\");",
+							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"She is curious and adventurous!!\");",
+							"    pm.expect(pm.response.json()[\"dispositions\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"availability\"]).to.eq(\"available\");",
+							"    // pm.expect(pm.response.json()[\"admin\"]).to.eq(\"admin1\"); not sure how to pass at postman",
+							"    pm.expect(pm.response.json()[\"owner\"]).to.eq(null);",
+							"    pm.expect(pm.response.json()[\"image_url\"]).to.eq(null);",
+							"",
+							"    const dateNow = new Date();",
+							"    pm.expect(pm.response.json()[\"date_created\"]).to.eq(dateNow.toLocaleDateString());",
+							"    ",
+							"    const self_url = pm.environment.get(\"app_url\") + \"/pets/\" + pm.response.json()[\"id\"];",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"pet_name\":\"pet1\",\r\n   \"data_of_birth\":\"1-Sep-2020\",\r\n   \"type\":\"dog\",\r\n   \"breed\":\"husky\",\r\n   \"status\":\"just had a bath\",\r\n   \"description\":\"She is curious and adventurous!!\",\r\n   \"zip_code\":\"98029\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/pets",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"pets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add pet2 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6e4ca9d-ac87-4a4d-bfdb-e9cfda39eaea",
+						"exec": [
+							"pm.environment.set(\"pet2_id\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"pet_name\"]).to.eq(\"pet2\");",
+							"    pm.expect(pm.response.json()[\"data_of_birth\"]).to.eq(\"2-Sep-2020\");",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"cat\");",
+							"    pm.expect(pm.response.json()[\"breed\"]).to.eq(\"other\");",
+							"    pm.expect(pm.response.json()[\"status\"]).to.eq(\"vaccined\");",
+							"    pm.expect(pm.response.json()[\"zip_code\"]).to.eq(\"98101\");",
+							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"She is curious and adventurous!!\");",
+							"    pm.expect(pm.response.json()[\"dispositions\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"availability\"]).to.eq(\"available\");",
+							"    // pm.expect(pm.response.json()[\"admin\"]).to.eq(\"admin1\"); not sure how to pass at postman",
+							"    pm.expect(pm.response.json()[\"owner\"]).to.eq(null);",
+							"    pm.expect(pm.response.json()[\"image_url\"]).to.eq(null);",
+							"    ",
+							"    const dateNow = new Date();",
+							"    pm.expect(pm.response.json()[\"date_created\"]).to.eq(dateNow.toLocaleDateString());",
+							"    ",
+							"    const self_url = pm.environment.get(\"app_url\") + \"/pets/\" + pm.response.json()[\"id\"];",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"pet_name\":\"pet2\",\r\n   \"data_of_birth\":\"2-Sep-2020\",\r\n   \"type\":\"cat\",\r\n   \"breed\":\"other\",\r\n   \"status\":\"vaccined\",\r\n   \"description\":\"She is curious and adventurous!!\",\r\n   \"zip_code\":\"98101\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/pets",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"pets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pet1 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5292ef5f-4730-47ed-b4a9-3787703be253",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"pet_name\"]).to.eq(\"pet1\");",
+							"    pm.expect(pm.response.json()[\"data_of_birth\"]).to.eq(\"1-Sep-2020\");",
+							"    pm.expect(pm.response.json()[\"type\"]).to.eq(\"dog\");",
+							"    pm.expect(pm.response.json()[\"breed\"]).to.eq(\"husky\");",
+							"    pm.expect(pm.response.json()[\"status\"]).to.eq(\"just had a bath\");",
+							"    pm.expect(pm.response.json()[\"zip_code\"]).to.eq(\"98029\");",
+							"    pm.expect(pm.response.json()[\"description\"]).to.eq(\"She is curious and adventurous!!\");",
+							"    pm.expect(pm.response.json()[\"dispositions\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"availability\"]).to.eq(\"available\");",
+							"    // pm.expect(pm.response.json()[\"admin\"]).to.eq(\"admin1\"); not sure how to pass at postman",
+							"    pm.expect(pm.response.json()[\"owner\"]).to.eq(null);",
+							"    pm.expect(pm.response.json()[\"image_url\"]).to.eq(null);",
+							"",
+							"    const dateNow = new Date();",
+							"    pm.expect(pm.response.json()[\"date_created\"]).to.eq(dateNow.toLocaleDateString());",
+							"    ",
+							"    const self_url = pm.environment.get(\"app_url\") + \"/pets/\" + pm.response.json()[\"id\"];",
+							"    pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/pets/{{pet1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"pets",
+						"{{pet1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete pet1 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70251f3d-750b-40ee-a852-4e4af3aab5a7",
 						"exec": [
 							"pm.test(\"204 no content\", function () {",
 							"    pm.response.to.have.status(204);",
 							"});",
 							"",
-							"pm.environment.unset(\"admin2_id\");"
+							"pm.environment.unset(\"pet1_id\");"
 						],
 						"type": "text/javascript"
 					}
@@ -593,13 +1454,47 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{app_url}}/admins/{{admin2_id}}",
+					"raw": "{{app_url}}/pets/{{pet1_id}}",
 					"host": [
 						"{{app_url}}"
 					],
 					"path": [
-						"admins",
-						"{{admin2_id}}"
+						"pets",
+						"{{pet1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete pet2 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e1e8d5f3-afd0-4d7e-a441-51b244820324",
+						"exec": [
+							"pm.test(\"204 no content\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.environment.unset(\"pet2_id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/pets/{{pet2_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"pets",
+						"{{pet2_id}}"
 					]
 				}
 			},
@@ -610,7 +1505,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "b2bc8b36-0c5c-462a-a632-0cab711d0e75",
+				"id": "03cd3804-7295-4f82-8d19-4c2b865ad377",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -620,7 +1515,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "4e6e676b-09ab-4e1d-bc73-791e0b709fd3",
+				"id": "cc64beaf-7456-4582-912e-238abeb77636",
 				"type": "text/javascript",
 				"exec": [
 					""
