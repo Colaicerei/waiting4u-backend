@@ -1,0 +1,491 @@
+{
+	"info": {
+		"_postman_id": "c6977167-3efd-46c6-9ba0-f8bee4f65290",
+		"name": "waiting4u",
+		"description": "In order to run this collection, you need an environment which has the following 3 environment variables pre-defined:\n\napp_url\n- Set this to your app. E.g., when running locally set it to http://localhost:3000. When running the app on GCP. set it to https://waiting4u.com\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add admin1 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9eb8a42f-d59c-4daf-9ac7-8e8b008c937b",
+						"exec": [
+							"pm.environment.set(\"admin_id1\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin1\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin2 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fa44e0bf-a71d-4874-a60e-0f09d14e57cc",
+						"exec": [
+							"pm.environment.set(\"admin_id2\", pm.response.json()[\"id\"]);",
+							"",
+							"pm.test(\"201 status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin2\");",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin2@oregonstate.edu\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin2\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin2@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with too short name 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb13e22c-414e-470e-a549-de879d4e7155",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Name should be 3 to 12 characters\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"ad\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with too short password 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "87e5a109-5d0c-43b5-a22f-25b2180a7637",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin3\",\r\n   \"password\":\"1234567\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with too long name 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bbded4df-a29a-4894-b800-402b3a0c11cf",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Name should be 3 to 12 characters\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"1234567890123\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with too long password 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9c78307-5366-4209-b5f5-adddee3a715d",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin3\",\r\n   \"password\":\"12345678901234567\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with duplicate name 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f4a7f788-e8b0-4b88-8086-473d6f8c50b7",
+						"exec": [
+							"pm.test(\"403 status code\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"403 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The name already exists, please use another one\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin2@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add admin with duplicate email 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "55724438-4f3b-4162-ae99-f290b92007ad",
+						"exec": [
+							"pm.test(\"403 status code\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"403 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The email already exists, please use another one\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"admin_name\":\"admin3\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"admin1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/admins",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete admin1 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1956e3c4-b89d-4441-b04a-d94653e33062",
+						"exec": [
+							"pm.test(\"204 no content\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.environment.unset(\"admin1_id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/admins/{{admin1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins",
+						"{{admin1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete admin2 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "485205f8-0531-412b-864a-5baef62b6812",
+						"exec": [
+							"pm.test(\"204 no content\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.environment.unset(\"admin2_id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/admins/{{admin2_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins",
+						"{{admin2_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b2bc8b36-0c5c-462a-a632-0cab711d0e75",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4e6e676b-09ab-4e1d-bc73-791e0b709fd3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
