@@ -9,12 +9,13 @@ public class AdminRegisterRequest {
     //https://stackoverflow.com/questions/8560348/different-names-of-json-property-during-serialization-and-deserialization
     @JsonProperty("admin_name")
     //https://phoenixnap.com/kb/spring-boot-validation-for-rest-services
-    //@Size(min = 3, max = 12, message = "Name should be 3 to 12 characters")
+    @Size(min = 3, max = 12, message = "Name should be 3 to 12 characters")
     //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
-    //@Pattern(regexp = "^\\w+(\\d+)?", message = "Name must letters and numbers only")
+    @Pattern(regexp = "^\\w+(\\d+)?", message = "Name must letters and numbers only")
     private String adminName;
-//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,16}$\n",
-//            message = "Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number")
+    //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$",
+        message = "Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number")
     private String password;
     private String email;
 
