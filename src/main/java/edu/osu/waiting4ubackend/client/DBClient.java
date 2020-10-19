@@ -1,46 +1,47 @@
 package edu.osu.waiting4ubackend.client;
 
-import com.google.api.core.ApiFuture;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.*;
+import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Admin;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+//https://cloud.google.com/datastore/docs/reference/libraries
+//https://cloud.google.com/datastore/docs/concepts/queries
 public class DBClient {
     private static final String ADMINS_COLLECTION_NAME = "admins";
-    private Firestore db;
+    private Datastore db;
 
-    public DBClient() throws IOException {
-        FirestoreOptions firestoreOptions =
-                FirestoreOptions.getDefaultInstance().toBuilder()
-                        .setProjectId("waiting4u")
-                        .setCredentials(GoogleCredentials.getApplicationDefault())
+    public DBClient() {
+        db = DatastoreOptions.getDefaultInstance().getService();
+    }
+
+    public boolean userNameExits(String userName) {
+        Query<Entity> query =
+                Query.newEntityQueryBuilder().setKind(ADMINS_COLLECTION_NAME)
+                        .setFilter(StructuredQuery.PropertyFilter.eq("userName", userName))
                         .build();
-        this.db = firestoreOptions.getService();
+        QueryResults<Entity> results = db.run(query);
+        return results.hasNext();
     }
 
-    public boolean userNameExits(String userName) throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> future = db.collection(ADMINS_COLLECTION_NAME).whereEqualTo("userName", userName).get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        return !documents.isEmpty();
+    public boolean emailExits(String email) {
+        Query<Entity> query =
+                Query.newEntityQueryBuilder().setKind(ADMINS_COLLECTION_NAME)
+                        .setFilter(StructuredQuery.PropertyFilter.eq("email", email))
+                        .build();
+        QueryResults<Entity> results = db.run(query);
+        return results.hasNext();
     }
 
-    public boolean emailExits(String email) throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> future = db.collection(ADMINS_COLLECTION_NAME).whereEqualTo("email", email).get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        return !documents.isEmpty();
-    }
+    public String saveAdmin(Admin admin) {
+        Key key = db.allocateId(db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey());
+        Entity adminEntity = Entity.newBuilder(key)
+                .set("userName", admin.getUserName())
+                .set("email", admin.getEmail())
+                .set("password", admin.getPassword())
+                .build();
+        db.put(adminEntity);
 
-    public String saveAdmin(Admin admin) throws ExecutionException, InterruptedException {
-        //asynchronously ?
-        String id = db.collection(ADMINS_COLLECTION_NAME).document().getId();
-        admin.setId(id);
-        DocumentReference documentReference = db.collection(ADMINS_COLLECTION_NAME).document(id);
-        ApiFuture<WriteResult> result = documentReference.set(admin);
-        result.get();
-        return id;
+        return key.getId().toString();
     }
 }
