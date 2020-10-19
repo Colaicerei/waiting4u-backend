@@ -15,7 +15,7 @@ public class DBClient {
         db = DatastoreOptions.getDefaultInstance().getService();
     }
 
-    public boolean userNameExits(String userName) {
+    public boolean userNameExists(String userName) {
         Query<Entity> query =
                 Query.newEntityQueryBuilder().setKind(ADMINS_COLLECTION_NAME)
                         .setFilter(StructuredQuery.PropertyFilter.eq("userName", userName))
@@ -24,7 +24,7 @@ public class DBClient {
         return results.hasNext();
     }
 
-    public boolean emailExits(String email) {
+    public boolean emailExists(String email) {
         Query<Entity> query =
                 Query.newEntityQueryBuilder().setKind(ADMINS_COLLECTION_NAME)
                         .setFilter(StructuredQuery.PropertyFilter.eq("email", email))
