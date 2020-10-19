@@ -3,7 +3,7 @@ package edu.osu.waiting4ubackend.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AdminRegisterResponse {
-    @JsonProperty("admin_ID")
+    @JsonProperty("admin_id")
     private String id;
     @JsonProperty("admin_name")
     private String adminName;
