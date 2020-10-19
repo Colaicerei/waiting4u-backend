@@ -7,6 +7,7 @@ import edu.osu.waiting4ubackend.request.AdminRegisterRequest;
 import edu.osu.waiting4ubackend.response.AdminRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,16 +21,17 @@ public class AdminController {
     //https://www.baeldung.com/spring-controllers#Boot
     //https://howtodoinjava.com/spring5/webmvc/controller-getmapping-postmapping/
     //https://stackoverflow.com/questions/24292373/spring-boot-rest-controller-how-to-return-different-http-status-codes
+    @CrossOrigin
     @PostMapping(value = "/admins", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@Valid @RequestBody AdminRegisterRequest request) throws IOException, ExecutionException, InterruptedException {
         Admin admin = new Admin(request.getAdminName(), request.getPassword(), request.getEmail());
         DBClient dbClient = new DBClient();
         //check duplicate userName
-        if(dbClient.userNameExits(admin.getUserName())) {
+        if(dbClient.userNameExists(admin.getUserName())) {
             return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
         //check duplicate email
-        if(dbClient.emailExits(admin.getEmail())) {
+        if(dbClient.emailExists(admin.getEmail())) {
             return new ResponseEntity<>("{\"Error\":  \"The email already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
 
