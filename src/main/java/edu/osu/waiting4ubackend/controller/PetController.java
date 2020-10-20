@@ -1,4 +1,4 @@
 package edu.osu.waiting4ubackend.controller;
 
-public class AnimalController {
+public class PetController {
 }
