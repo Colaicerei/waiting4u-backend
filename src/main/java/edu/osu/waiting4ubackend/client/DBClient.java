@@ -47,7 +47,18 @@ public class DBClient {
         return key.getId().toString();
     }
 
-    // functions for user from here
+    public Admin getAdminById(long id) {
+        Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(id);
+        Entity adminEntity = db.get(key);
+        if(adminEntity == null) return null;
+        return new Admin.AdminBuilder()
+                .setId(key.getId().toString())
+                .setUserName(adminEntity.getString("userName"))
+                .setEmail(adminEntity.getString("email"))
+                .build();
+    }
+  
+  // functions for user from here
     public boolean user_nameExists(String userName) {
         Query<Entity> query =
                 Query.newEntityQueryBuilder().setKind(USERS_COLLECTION_NAME)
@@ -77,6 +88,5 @@ public class DBClient {
         db.put(userEntity);
 
         return key.getId().toString();
-    }
-
+    }  
 }

@@ -11,24 +11,17 @@ public class Admin {
     private String userName;
     private String password;
     private String email;
-    private List<Integer> pets;
+    private List<String> pets;
 
     public Admin() {
     }
 
-    public Admin(String userName, String password, String email) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.pets = new ArrayList<>();
-    }
-
-    public Admin(String id, String userName, String password, String email) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.pets = new ArrayList<>();
+    private Admin(AdminBuilder adminBuilder) {
+        this.id = adminBuilder.id;
+        this.userName = adminBuilder.userName;
+        this.password = adminBuilder.password;
+        this.email = adminBuilder.email;
+        this.pets = adminBuilder.pets;
     }
 
     public String getId() {
@@ -51,11 +44,48 @@ public class Admin {
         return email;
     }
 
-    public List<Integer> getPets() {
+    public List<String> getPets() {
         return pets;
     }
 
-    public void addPet(int petId) {
+    public void addPet(String petId) {
         pets.add(petId);
+    }
+
+    public static class AdminBuilder {
+        private String id;
+        private String userName;
+        private String password;
+        private String email;
+        private List<String> pets;
+
+        public AdminBuilder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public AdminBuilder setUserName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+
+        public AdminBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public AdminBuilder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public AdminBuilder setPets(List<String> pets) {
+            this.pets = pets;
+            return this;
+        }
+
+        public Admin build() {
+            return new Admin(this);
+        }
     }
  }
