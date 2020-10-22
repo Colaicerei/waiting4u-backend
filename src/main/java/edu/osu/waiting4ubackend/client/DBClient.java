@@ -44,4 +44,15 @@ public class DBClient {
 
         return key.getId().toString();
     }
+
+    public Admin getAdminById(long id) {
+        Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(id);
+        Entity adminEntity = db.get(key);
+        if(adminEntity == null) return null;
+        return new Admin.AdminBuilder()
+                .setId(key.getId().toString())
+                .setUserName(adminEntity.getString("userName"))
+                .setEmail(adminEntity.getString("email"))
+                .build();
+    }
 }
