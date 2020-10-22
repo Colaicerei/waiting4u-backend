@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.osu.waiting4ubackend.client.DBClient;
+import edu.osu.waiting4ubackend.client.DBClient_user;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@Valid @RequestBody UserRegisterRequest request) throws IOException, ExecutionException, InterruptedException {
         User user = new User(request.getUserName(), request.getPassword(), request.getEmail(), request.getIntroduction());
-        DBClient dbClient = new DBClient();
+        DBClient_user dbClient = new DBClient_user();
         //check duplicate userName
         if(dbClient.user_nameExists(user.getUserName())) {
             return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
