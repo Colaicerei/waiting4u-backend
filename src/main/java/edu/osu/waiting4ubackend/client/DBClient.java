@@ -4,6 +4,7 @@ import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.User;
 
+import javax.management.QueryEval;
 import java.io.IOException;
 
 //https://cloud.google.com/datastore/docs/reference/libraries
@@ -32,6 +33,22 @@ public class DBClient {
                         .build();
         QueryResults<Entity> results = db.run(query);
         return results.hasNext();
+    }
+
+    public String adminExists(Admin admin) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(ADMINS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.CompositeFilter
+                        .and(StructuredQuery.PropertyFilter.eq("email", admin.getEmail()),
+                                StructuredQuery.PropertyFilter.eq("password", admin.getPassword())))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            Entity entity = results.next();
+            return entity.getKey().getId().toString();
+        }
     }
 
     public String saveAdmin(Admin admin) {
