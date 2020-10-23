@@ -46,4 +46,15 @@ public class DBClient_user {
         return key.getId().toString();
     }
 
+    public User getUserById(long id) {
+        Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(id);
+        Entity userEntity = db.get(key);
+        if(userEntity == null) return null;
+        return new User.UserBuilder()
+                .setId(key.getId().toString())
+                .setUserName(userEntity.getString("user_name"))
+                .setEmail(userEntity.getString("email"))
+                .setIntroduction((userEntity.getString("introduction")))
+                .build();
+    }
 }
