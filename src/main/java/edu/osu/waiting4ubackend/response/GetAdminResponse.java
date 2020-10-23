@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class AdminLoginResponse {
+public class GetAdminResponse {
     @JsonProperty("admin_id")
     private String id;
     @JsonProperty("admin_name")
@@ -12,7 +12,7 @@ public class AdminLoginResponse {
     private String email;
     private List<String> pets;
 
-    public AdminLoginResponse(String id, String adminName, String email, List<String> pets) {
+    public GetAdminResponse(String id, String adminName, String email, List<String> pets) {
         this.id = id;
         this.adminName = adminName;
         this.email = email;
