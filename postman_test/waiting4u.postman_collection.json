@@ -12,18 +12,18 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "16eceae8-b00a-444a-903c-f0f97937edd2",
+						"id": "0770ca3f-c025-40c7-8f05-18812bfecd0f",
 						"exec": [
-							"pm.environment.set(\"admin1_id\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"admin1_id\", pm.response.json()[\"admin_id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
 							"});",
-							"",
+							"pm.environment.get(\"variable_key\");",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin1\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
-							"    //pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
 							"    //pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
@@ -68,7 +68,7 @@
 					"script": {
 						"id": "21ce9450-d5c1-4615-b76b-ffe174813778",
 						"exec": [
-							"pm.environment.set(\"admin2_id\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"admin2_id\", pm.response.json()[\"admin_id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -78,7 +78,7 @@
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin2\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
-							"    //pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin2@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin2@oregonstate.edu\");",
 							"    //pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
@@ -599,9 +599,9 @@
 							"",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"admin_name\"]).to.eq(\"admin1\");",
-							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"admin1@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"pets\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"pets\"]).to.eq(null);",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/admins/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});"
@@ -627,14 +627,14 @@
 			"response": []
 		},
 		{
-			"name": "add user1 201",
+			"name": "add user1 201 with empty introduction",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"id": "8827e03e-a3e5-4faa-b839-498afa6f5d4a",
 						"exec": [
-							"pm.environment.set(\"user1_id\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"user1_id\", pm.response.json()[\"user_id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -642,10 +642,10 @@
 							"",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user1\");",
-							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
-							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});",
@@ -667,7 +667,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}\r\n"
+					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\",\r\n   \"introduction\": \"\"\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -682,14 +682,14 @@
 			"response": []
 		},
 		{
-			"name": "add user2 201",
+			"name": "add user2 with introduction 201",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"id": "c2c647a1-4511-47fd-81af-e58a3ce43231",
 						"exec": [
-							"pm.environment.set(\"user2_id\", pm.response.json()[\"id\"]);",
+							"pm.environment.set(\"user2_id\", pm.response.json()[\"user_id\"]);",
 							"",
 							"pm.test(\"201 status code\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -698,10 +698,10 @@
 							"",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
-							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user2@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
-							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"I am super!\");",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});",
@@ -723,7 +723,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"user2\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user2@oregonstate.edu\"\r\n}\r\n"
+					"raw": "{\r\n   \"user_name\":\"user2\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user2@oregonstate.edu\",\r\n   \"introduction\": \"I am super!\"\r\n}\r\n"
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -1221,10 +1221,11 @@
 							"",
 							"pm.test(\"content is valid\", function () {",
 							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user1\");",
-							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
-							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(null);",
+							"    pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
 							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
 							"});"
@@ -1244,6 +1245,49 @@
 					"path": [
 						"users",
 						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user2 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "61af8886-7c3f-4afa-b9d4-9e2e786ee13c",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user2@oregonstate.edu\");",
+							"    pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"I am super!\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/users/{{user2_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user2_id}}"
 					]
 				}
 			},
