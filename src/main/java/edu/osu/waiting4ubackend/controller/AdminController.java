@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.osu.waiting4ubackend.client.DBClient;
 import edu.osu.waiting4ubackend.entity.Admin;
+import edu.osu.waiting4ubackend.request.AdminLoginRequest;
 import edu.osu.waiting4ubackend.request.AdminRegisterRequest;
 import edu.osu.waiting4ubackend.response.AdminLoginResponse;
+import edu.osu.waiting4ubackend.response.GetAdminResponse;
 import edu.osu.waiting4ubackend.response.AdminRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,16 +48,36 @@ public class AdminController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/admins/{id}", produces = "application/json")
-    public ResponseEntity<String> login(@PathVariable long id) throws JsonProcessingException {
+    @PostMapping(value = "/admins/login", produces = "application/json")
+    public ResponseEntity<String> login(@RequestBody AdminLoginRequest adminLoginRequest) throws JsonProcessingException {
+        Admin admin = new Admin.AdminBuilder()
+                .setEmail(adminLoginRequest.getEmail())
+                .setPassword(adminLoginRequest.getPassword())
+                .build();
+
+        DBClient dbClient = new DBClient();
+        //check duplicate existing admin
+        String adminId = dbClient.adminExists(admin);
+        if(adminId == null) {
+            return new ResponseEntity<>("{\"Error\":  \"The admin doesn't exist\"}", HttpStatus.UNAUTHORIZED);
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            AdminLoginResponse adminLoginResponse = new AdminLoginResponse(adminId);
+            return new ResponseEntity<>(objectMapper.writeValueAsString(adminLoginResponse), HttpStatus.OK);
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/admins/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> getAdmin(@PathVariable long id) throws JsonProcessingException {
         DBClient dbClient = new DBClient();
         Admin admin = dbClient.getAdminById(id);
         //check valid admin id
         if(admin == null) {
-            return new ResponseEntity<>("{\"Error\":  \"The admin_id doesn't exist\"}", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized user\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        AdminLoginResponse adminLoginResponse = new AdminLoginResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(adminLoginResponse), HttpStatus.OK);
+        GetAdminResponse getAdminResponse = new GetAdminResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getAdminResponse), HttpStatus.OK);
     }
 }
