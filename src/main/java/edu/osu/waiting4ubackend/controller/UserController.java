@@ -2,7 +2,7 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.osu.waiting4ubackend.client.DBClient_user;
+import edu.osu.waiting4ubackend.client.DBClient;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
@@ -26,7 +26,7 @@ public class UserController {
                 .setIntroduction(request.getIntroduction())
                 .build();
 
-        DBClient_user dbClient = new DBClient_user();
+        DBClient dbClient = new DBClient();
         //check duplicate userName
         if(dbClient.user_nameExists(user.getUserName())) {
             return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
@@ -45,7 +45,7 @@ public class UserController {
     @CrossOrigin
     @GetMapping(value = "/users/{id}", produces = "application/json")
     public ResponseEntity<String> login(@PathVariable long id) throws JsonProcessingException {
-        DBClient_user dbClient = new DBClient_user();
+        DBClient dbClient = new DBClient();
         User user = dbClient.getUserById(id);
         //check valid user id
         if(user == null) {
@@ -54,5 +54,5 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         UserLoginResponse userLoginResponse = new UserLoginResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
         return new ResponseEntity<>(objectMapper.writeValueAsString(userLoginResponse), HttpStatus.OK);
-    }
+    }   
 }
