@@ -68,7 +68,7 @@ public class AdminController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/admins/{id}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/admins/{id}", produces = "application/json")
     public ResponseEntity<String> getAdmin(@PathVariable long id) throws JsonProcessingException {
         DBClient dbClient = new DBClient();
         Admin admin = dbClient.getAdminById(id);
