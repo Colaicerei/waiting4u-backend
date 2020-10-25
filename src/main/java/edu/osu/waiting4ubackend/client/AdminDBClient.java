@@ -2,20 +2,14 @@ package edu.osu.waiting4ubackend.client;
 
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Admin;
-import edu.osu.waiting4ubackend.entity.User;
-
-import javax.management.QueryEval;
-import java.io.IOException;
 
 //https://cloud.google.com/datastore/docs/reference/libraries
 //https://cloud.google.com/datastore/docs/concepts/queries
-public class DBClient {
+public class AdminDBClient {
     private static final String ADMINS_COLLECTION_NAME = "admins";
-    //user functions from here
-    private static final String USERS_COLLECTION_NAME = "users";
     private Datastore db;
 
-    public DBClient() {
+    public AdminDBClient() {
         db = DatastoreOptions.getDefaultInstance().getService();
     }
 
@@ -75,6 +69,4 @@ public class DBClient {
                 .setEmail(adminEntity.getString("email"))
                 .build();
     }
-
-
 }
