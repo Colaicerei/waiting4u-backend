@@ -2,7 +2,7 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.osu.waiting4ubackend.client.DBClient;
+import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.request.AdminLoginRequest;
 import edu.osu.waiting4ubackend.request.AdminRegisterRequest;
@@ -30,17 +30,17 @@ public class AdminController {
                 .setEmail(request.getEmail())
                 .build();
 
-        DBClient dbClient = new DBClient();
+        AdminDBClient adminDbClient = new AdminDBClient();
         //check duplicate userName
-        if(dbClient.userNameExists(admin.getUserName())) {
+        if(adminDbClient.userNameExists(admin.getUserName())) {
             return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
         //check duplicate email
-        if(dbClient.emailExists(admin.getEmail())) {
+        if(adminDbClient.emailExists(admin.getEmail())) {
             return new ResponseEntity<>("{\"Error\":  \"The email already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
 
-        String adminId = dbClient.saveAdmin(admin);
+        String adminId = adminDbClient.saveAdmin(admin);
         //https://www.baeldung.com/jackson-object-mapper-tutorial
         ObjectMapper objectMapper = new ObjectMapper();
         AdminRegisterResponse adminRegisterResponse = new AdminRegisterResponse(adminId, request.getAdminName(), request.getEmail());
@@ -55,9 +55,9 @@ public class AdminController {
                 .setPassword(adminLoginRequest.getPassword())
                 .build();
 
-        DBClient dbClient = new DBClient();
+        AdminDBClient adminDbClient = new AdminDBClient();
         //check duplicate existing admin
-        String adminId = dbClient.adminExists(admin);
+        String adminId = adminDbClient.adminExists(admin);
         if(adminId == null) {
             return new ResponseEntity<>("{\"Error\":  \"The admin doesn't exist\"}", HttpStatus.UNAUTHORIZED);
         } else {
@@ -70,8 +70,8 @@ public class AdminController {
     @CrossOrigin
     @GetMapping(value = "/admins/{id}", produces = "application/json")
     public ResponseEntity<String> getAdmin(@PathVariable long id) throws JsonProcessingException {
-        DBClient dbClient = new DBClient();
-        Admin admin = dbClient.getAdminById(id);
+        AdminDBClient adminDbClient = new AdminDBClient();
+        Admin admin = adminDbClient.getAdminById(id);
         //check valid admin id
         if(admin == null) {
             return new ResponseEntity<>("{\"Error\":  \"Unauthorized user\"}", HttpStatus.NOT_FOUND);
