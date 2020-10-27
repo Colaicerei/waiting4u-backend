@@ -56,7 +56,7 @@ public class UserController {
         //get id if user exists
         String userId = userDbClient.userExists(user);
         if(userId == null) {
-            return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("{\"Error\":  \"Email or password do not match our records\"}", HttpStatus.UNAUTHORIZED);
         } else {
             ObjectMapper objectMapper = new ObjectMapper();
             UserLoginResponse userLoginResponse = new UserLoginResponse(userId);
