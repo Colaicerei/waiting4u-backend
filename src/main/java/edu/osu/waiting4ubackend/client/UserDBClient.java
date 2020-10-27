@@ -1,6 +1,7 @@
 package edu.osu.waiting4ubackend.client;
 
 import com.google.cloud.datastore.*;
+import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.User;
 
 public class UserDBClient {
@@ -28,6 +29,22 @@ public class UserDBClient {
                         .build();
         QueryResults<Entity> results = db.run(query);
         return results.hasNext();
+    }
+
+    public String userExists(User user) {
+        Query<Entity> query =
+                Query.newEntityQueryBuilder().setKind(USERS_COLLECTION_NAME)
+                        .setFilter(StructuredQuery.CompositeFilter
+                        .and(StructuredQuery.PropertyFilter.eq("email", user.getEmail()),
+                                StructuredQuery.PropertyFilter.eq("password", user.getPassword())))
+                        .build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            Entity entity = results.next();
+            return entity.getKey().getId().toString();
+        }
     }
 
     public String saveUser(User user) {
