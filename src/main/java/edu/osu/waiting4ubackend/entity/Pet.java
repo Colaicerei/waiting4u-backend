@@ -1,6 +1,9 @@
 package edu.osu.waiting4ubackend.entity;
 
 import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,10 +14,12 @@ public class Pet {
     private String petName;
     private String type;
     private String breed;
-    private LocalDate dateCreated;
+    private Date dateOfBirth;
+    private Date dateCreated;
     private String availability;
     private String status;
     private String description;
+    private String adminId;
     private List<String> dispositions;
     private String imageUrl;
 
@@ -23,10 +28,12 @@ public class Pet {
         this.petName = petBuilder.petName;
         this.type = petBuilder.type;
         this.breed = petBuilder.breed;
+        this.dateOfBirth = petBuilder.dateOfBirth;
         this.dateCreated = petBuilder.dateCreated;
         this.availability = petBuilder.availability;
         this.status = petBuilder.status;
         this.description = petBuilder.description;
+        this.adminId = petBuilder.adminId;
         this.dispositions = petBuilder.dispositions;
         this.imageUrl = petBuilder.imageUrl;
     }
@@ -47,6 +54,10 @@ public class Pet {
         return breed;
     }
 
+    public Date getDateOfBirth() { return dateOfBirth; }
+
+    public Date getDateCreated() { return  dateCreated; }
+
     public String getAvailability() {
         return availability;
     }
@@ -59,7 +70,10 @@ public class Pet {
         return description;
     }
 
+    public String getAdminId() { return  adminId; }
+
     public List<String> getDispositions() {
+
         return dispositions;
     }
 
@@ -72,11 +86,13 @@ public class Pet {
         private String petName;
         private String type;
         private String breed;
-        private LocalDate dateCreated;
-        private String availability;
-        private String status;
+        private Date dateOfBirth;
+        private Date dateCreated;
+        private String availability = "available";
+        private String status = "";
         private String description;
-        private List<String> dispositions;
+        private String adminId;
+        private List<String> dispositions = new ArrayList<>();
         private String imageUrl;
 
         public PetBuilder setId(String id) {
@@ -99,7 +115,12 @@ public class Pet {
             return this;
         }
 
-        public PetBuilder setDateCreated(LocalDate dateCreated) {
+        public PetBuilder setDateOfBirth(Date dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+
+        public PetBuilder setDateCreated(Date dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
@@ -116,6 +137,11 @@ public class Pet {
 
         public PetBuilder setDescription(String description) {
             this.description = description;
+            return this;
+        }
+
+        public PetBuilder setAdminId(String adminId) {
+            this.adminId = adminId;
             return this;
         }
 
