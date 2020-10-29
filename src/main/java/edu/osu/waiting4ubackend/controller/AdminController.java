@@ -48,7 +48,7 @@ public class AdminController {
     }
 
     @CrossOrigin
-    @PostMapping(value = "/admins/login", produces = "application/json")
+    @PostMapping(value = "/admins/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> login(@RequestBody AdminLoginRequest adminLoginRequest) throws JsonProcessingException {
         Admin admin = new Admin.AdminBuilder()
                 .setEmail(adminLoginRequest.getEmail())
