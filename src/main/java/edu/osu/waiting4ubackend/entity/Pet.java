@@ -1,5 +1,6 @@
 package edu.osu.waiting4ubackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -10,17 +11,23 @@ import java.util.List;
  * Entity for Pet class
  */
 public class Pet {
+    @JsonProperty("pet_id")
     private String id;
+    @JsonProperty("pet_name")
     private String petName;
     private String type;
     private String breed;
+    @JsonProperty("date_of_birth")
     private Date dateOfBirth;
+    @JsonProperty("date_created")
     private Date dateCreated;
     private String availability;
     private String status;
     private String description;
+    @JsonProperty("admin_id")
     private String adminId;
     private List<String> dispositions;
+    @JsonProperty("image_url")
     private String imageUrl;
 
     private Pet(PetBuilder petBuilder) {
