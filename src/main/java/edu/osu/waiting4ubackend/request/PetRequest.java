@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-public class CreatePetRequest {
+public class PetRequest {
     @JsonProperty("pet_name")
     private String petName;
     @JsonProperty("date_of_birth")
