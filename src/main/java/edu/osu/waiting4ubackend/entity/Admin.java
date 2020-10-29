@@ -1,6 +1,5 @@
 package edu.osu.waiting4ubackend.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +44,7 @@ public class Admin {
     }
 
     public List<String> getPets() {
+
         return pets;
     }
 
