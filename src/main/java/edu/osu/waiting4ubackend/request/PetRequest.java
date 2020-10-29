@@ -3,6 +3,7 @@ package edu.osu.waiting4ubackend.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.List;
 
 public class PetRequest {
     @JsonProperty("pet_name")
@@ -11,6 +12,7 @@ public class PetRequest {
     private Date dateOfBirth;
     private String type;
     private String breed;
+    private List<String> dispositions;
     private String description;
     @JsonProperty("image_url")
     private String imageUrl;
@@ -30,6 +32,8 @@ public class PetRequest {
     public String getBreed() {
         return breed;
     }
+
+    public List<String> getDispositions() { return dispositions; }
 
     public String getDescription() {
         return description;
