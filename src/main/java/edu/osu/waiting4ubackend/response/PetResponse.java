@@ -3,8 +3,10 @@ package edu.osu.waiting4ubackend.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CreatePetResponse {
+public class PetResponse {
     @JsonProperty("pet_id")
     private String id;
     @JsonProperty("pet_name")
@@ -17,8 +19,15 @@ public class CreatePetResponse {
     private Date dateCreated;
     private String availability;
     private String status;
+    private String description;
+    private String adminId;
+    private List<String> dispositions;
     @JsonProperty("image_url")
     private String imageUrl;
+
+    public String getId() {
+        return id;
+    }
 
 
 }
