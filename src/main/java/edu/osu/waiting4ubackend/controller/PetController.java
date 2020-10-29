@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PetController {
     @CrossOrigin
-    @PostMapping(value = "/admin/{id}/pets", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/admins/{id}/pets", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createPet(@PathVariable long id, @RequestBody PetRequest request) throws JsonProcessingException {
 
         Pet pet = new Pet.PetBuilder()
