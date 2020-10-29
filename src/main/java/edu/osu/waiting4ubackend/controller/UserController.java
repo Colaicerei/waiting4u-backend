@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PostMapping(value = "/users/login", produces = "application/json")
+    @PostMapping(value = "/users/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) throws JsonProcessingException {
         User user = new User.UserBuilder()
                 .setEmail(userLoginRequest.getEmail())
