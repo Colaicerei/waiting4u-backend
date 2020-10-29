@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.osu.waiting4ubackend.client.UserDBClient;
 import edu.osu.waiting4ubackend.entity.User;
+import edu.osu.waiting4ubackend.request.UserLoginRequest;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
+import edu.osu.waiting4ubackend.response.GetUserResponse;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,16 +45,36 @@ public class UserController {
     }
 
     @CrossOrigin
+    @PostMapping(value = "/users/login", produces = "application/json")
+    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) throws JsonProcessingException {
+        User user = new User.UserBuilder()
+                .setEmail(userLoginRequest.getEmail())
+                .setPassword(userLoginRequest.getPassword())
+                .build();
+
+        UserDBClient userDbClient = new UserDBClient();
+        //get id if user exists
+        String userId = userDbClient.userExists(user);
+        if(userId == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Email or password do not match our records\"}", HttpStatus.UNAUTHORIZED);
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserLoginResponse userLoginResponse = new UserLoginResponse(userId);
+            return new ResponseEntity<>(objectMapper.writeValueAsString(userLoginResponse), HttpStatus.OK);
+        }
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/users/{id}", produces = "application/json")
     public ResponseEntity<String> login(@PathVariable long id) throws JsonProcessingException {
         UserDBClient userDBClient = new UserDBClient();
         User user = userDBClient.getUserById(id);
         //check valid user id
         if(user == null) {
-            return new ResponseEntity<>("{\"Error\":  \"The user_id doesn't exist\"}", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        UserLoginResponse userLoginResponse = new UserLoginResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(userLoginResponse), HttpStatus.OK);
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }   
 }

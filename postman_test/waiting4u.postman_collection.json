@@ -1208,6 +1208,144 @@
 			"response": []
 		},
 		{
+			"name": "User1 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b40f06b8-bc31-4c3a-8d62-f2daa87fc9c8",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect((pm.response.json()[\"user_id\"]).toString()).to.eq(pm.environment.get(\"user1_id\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User login wrong email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b8f1e88d-4c2a-4260-802d-c98b0ab49abe",
+						"exec": [
+							"pm.test(\"401 status code\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"401 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Email or password do not match our records\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User login wrong password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d3bfcb7-b8ec-4d34-a48a-55b191b9b2ca",
+						"exec": [
+							"pm.test(\"401 status code\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"401 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Email or password do not match our records\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\":\"Password12345\",\r\n   \"email\":\"user1@oregonstate.edu\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{app_url}}/users/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get user1 200",
 			"event": [
 				{
