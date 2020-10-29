@@ -28,7 +28,6 @@ public class PetDBClient {
                 .set("imageUrl", pet.getImageUrl())
                 .build();
         db.put(petEntity);
-        //System.out.println(petEntity);
         return new Pet.PetBuilder()
                 .setId(key.getId().toString())
                 .setPetName(petEntity.getString("petName"))
