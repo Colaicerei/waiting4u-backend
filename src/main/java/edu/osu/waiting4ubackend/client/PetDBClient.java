@@ -3,6 +3,10 @@ package edu.osu.waiting4ubackend.client;
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
+import sun.security.krb5.internal.PAEncTSEnc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PetDBClient {
     private static final String PETS_COLLECTION_NAME = "pets";
@@ -42,5 +46,20 @@ public class PetDBClient {
                 .setAdminId(petEntity.getString("adminId").toString())
                 .setImageUrl(petEntity.getString("imageUrl"))
                 .build();
+    }
+
+    public List<Pet> getPets() {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+
     }
 }
