@@ -3,6 +3,9 @@ package edu.osu.waiting4ubackend.client;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //https://cloud.google.com/datastore/docs/reference/libraries
 //https://cloud.google.com/datastore/docs/concepts/queries
 public class AdminDBClient {
@@ -53,6 +56,7 @@ public class AdminDBClient {
                 .set("userName", admin.getUserName())
                 .set("email", admin.getEmail())
                 .set("password", admin.getPassword())
+                .set("pets", DBClientHelper.convertToValueList(admin.getPets()))
                 .build();
         db.put(adminEntity);
 
@@ -67,6 +71,18 @@ public class AdminDBClient {
                 .setId(key.getId().toString())
                 .setUserName(adminEntity.getString("userName"))
                 .setEmail(adminEntity.getString("email"))
+                .setPets(DBClientHelper.convertToList(adminEntity.getList("pets")))
                 .build();
+    }
+
+    public void updatePetEntity(String petId, long adminId) {
+        Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(adminId);
+        Entity adminEntity = db.get(key);
+        List<Value<String>> valueList = adminEntity.getList("pets");
+//        System.out.println("hello");
+        List<Value<String>> list = new ArrayList<>(valueList);
+        list.add(StringValue.of(petId));
+        adminEntity = Entity.newBuilder(db.get(key)).set("pets", list).build();
+        db.update(adminEntity);
     }
 }
