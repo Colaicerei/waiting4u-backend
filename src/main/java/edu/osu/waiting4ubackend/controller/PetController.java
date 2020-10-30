@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class PetController {
     @CrossOrigin
@@ -36,5 +38,14 @@ public class PetController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petResponse), HttpStatus.CREATED);
 
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "pets", produces = "application/json")
+    public ResponseEntity<String> getPets() throws JsonProcessingException {
+        PetDBClient petDBClient = new PetDBClient();
+        List<Pet> petList = petDBClient.getPets();
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
     }
 }
