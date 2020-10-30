@@ -1,7 +1,10 @@
 package edu.osu.waiting4ubackend.client;
 
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Value;
+import edu.osu.waiting4ubackend.entity.Pet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +28,27 @@ public class DBClientHelper {
             list.add(v.get());
         }
         return list;
+    }
+
+    public static void populateQueryResults(List<Pet> list, QueryResults<Entity> results) {
+        while (results.hasNext()) {
+            Entity petEntity = results.next();
+            Pet pet = new Pet.PetBuilder()
+                    .setId(petEntity.getKey().getId().toString())
+                    .setPetName(petEntity.getString("petName"))
+                    .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
+                    .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                    .setType(petEntity.getString("type"))
+                    .setBreed(petEntity.getString("breed"))
+                    .setAvailability(petEntity.getString("availability"))
+                    .setStatus(petEntity.getString("status"))
+                    .setDescription(petEntity.getString("description"))
+                    .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
+                    .setAdminId(petEntity.getString("adminId").toString())
+                    .setImageUrl(petEntity.getString("imageUrl"))
+                    .build();
+            list.add(pet);
+        }
+
     }
 }
