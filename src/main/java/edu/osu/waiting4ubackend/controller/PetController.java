@@ -2,6 +2,7 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.client.PetDBClient;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.request.PetRequest;
@@ -20,13 +21,18 @@ public class PetController {
                 .setDateOfBirth(request.getDateOfBirth())
                 .setType(request.getType())
                 .setBreed(request.getBreed())
+                .setDispositions(request.getDispositions())
                 .setDescription(request.getDescription())
                 .setAdminId(String.valueOf(id))
                 .setImageUrl(request.getImageUrl())
                 .build();
 
         PetDBClient petDBClient = new PetDBClient();
+        //save pet into database
         Pet petResponse = petDBClient.savePet(pet);
+        //update the pet field in admin table
+        AdminDBClient adminDBClient = new AdminDBClient();
+        adminDBClient.updatePetEntity(petResponse.getId(), id);
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petResponse), HttpStatus.CREATED);
 
