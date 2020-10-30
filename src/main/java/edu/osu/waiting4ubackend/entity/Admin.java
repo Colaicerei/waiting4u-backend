@@ -1,5 +1,6 @@
 package edu.osu.waiting4ubackend.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class Admin {
         private String userName;
         private String password;
         private String email;
-        private List<String> pets;
+        private List<String> pets = new ArrayList<>();
 
         public AdminBuilder setId(String id) {
             this.id = id;
