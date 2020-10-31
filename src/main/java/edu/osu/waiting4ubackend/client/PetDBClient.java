@@ -76,7 +76,23 @@ public class PetDBClient {
         return petList;
     }
 
-//    public Pet getPetByAdmin(long petId, String adminId) {
-//
-//    }
+    public Pet getPetById(long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        Entity petEntity = db.get(key);
+        if(petEntity == null) return null;
+        return new Pet.PetBuilder()
+                .setId(key.getId().toString())
+                .setPetName(petEntity.getString("petName"))
+                .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
+                .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setType(petEntity.getString("type"))
+                .setBreed(petEntity.getString("breed"))
+                .setAvailability(petEntity.getString("availability"))
+                .setStatus(petEntity.getString("status"))
+                .setDescription(petEntity.getString("description"))
+                .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
+                .setAdminId(petEntity.getString("adminId").toString())
+                .setImageUrl(petEntity.getString("imageUrl"))
+                .build();
+    }
 }
