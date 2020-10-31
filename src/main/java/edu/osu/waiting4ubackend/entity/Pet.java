@@ -1,6 +1,8 @@
 package edu.osu.waiting4ubackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -21,14 +23,18 @@ public class Pet {
     private Date dateOfBirth;
     @JsonProperty("date_created")
     private Date dateCreated;
-    private String availability;
-    private String status;
+    private String availability = "available";
+    private String status = "";
     private String description;
     @JsonProperty("admin_id")
     private String adminId;
-    private List<String> dispositions;
+    private List<String> dispositions = new ArrayList<>();
     @JsonProperty("image_url")
-    private String imageUrl;
+    private String imageUrl = "";
+
+    public Pet() {
+
+    }
 
     private Pet(PetBuilder petBuilder) {
         this.id = petBuilder.id;
@@ -84,6 +90,30 @@ public class Pet {
         return dispositions;
     }
 
+    public void setAvailability(String s) {
+        if(s != null) {
+            availability = s;
+        }
+    }
+
+    public void setStatus(String s) {
+        if(s != null) {
+            status = s;
+        }
+    }
+
+    public void setDispositions(List<String> list) {
+        if(list != null) {
+            dispositions = list;
+        }
+    }
+
+    public void setImageUrl(String s) {
+        if(s != null) {
+            imageUrl = s;
+        }
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -98,9 +128,9 @@ public class Pet {
         private String availability = "available";
         private String status = "";
         private String description;
-        private String adminId;
+        private String adminId = "";
         private List<String> dispositions = new ArrayList<>();
-        private String imageUrl;
+        private String imageUrl = "";
 
         public PetBuilder setId(String id) {
             this.id = id;
