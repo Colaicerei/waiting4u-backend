@@ -102,7 +102,7 @@ public class UserController {
 
         if(request.getUserName() != null){
             //check duplicate userName
-           if(!request.getUserName().equals(user.getUserName()) & userDBClient.userNameExists(request.getUserName())) {
+           if(!request.getUserName().equals(user.getUserName()) && userDBClient.userNameExists(request.getUserName())) {
                 return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
             }
             user.setUserName(request.getUserName());
