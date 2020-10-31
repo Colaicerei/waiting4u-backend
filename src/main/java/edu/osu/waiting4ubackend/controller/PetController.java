@@ -2,17 +2,14 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.cloud.Timestamp;
 import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.client.PetDBClient;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.Pet;
-import edu.osu.waiting4ubackend.request.PetRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
