@@ -20,11 +20,13 @@ public class UserUpdateRequest {
     private String password;
     //private String email;
     private String introduction;
+    private String newPreference;
 
-    public UserUpdateRequest(String userName, String password, String introduction) {
+    public UserUpdateRequest(String userName, String password, String introduction, String newPreference) {
         this.userName = userName;
         this.password = password;
         this.introduction = introduction;
+        this.newPreference = newPreference;
     }
 
     public String getUserName() {
@@ -36,4 +38,6 @@ public class UserUpdateRequest {
     }
 
     public String getIntroduction() { return introduction; }
+
+    public String getNewPreference(){ return newPreference; }
 }

@@ -16,6 +16,8 @@ import edu.osu.waiting4ubackend.request.UserUpdateRequest;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Arrays;
+
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
 @RestController
@@ -92,6 +94,12 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
 
+        // adding preferences will be handled by its own "apply/add" button
+        if(request.getNewPreference() != null){
+            user.addPreference(request.getNewPreference());
+            userDBClient.updatePreferences(request.getNewPreference(), id);
+        }
+
         if(request.getUserName() != null){
             //check duplicate userName
            if(!request.getUserName().equals(user.getUserName()) & userDBClient.userNameExists(request.getUserName())) {
@@ -110,7 +118,7 @@ public class UserController {
 
         String userId = userDBClient.updateUser(user, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        UserRegisterResponse userRegisterResponse = new UserRegisterResponse(userId, user.getUserName(), user.getEmail(), user.getIntroduction());
+        UserRegisterResponse userRegisterResponse = new UserRegisterResponse(userId, user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
         return new ResponseEntity<>(objectMapper.writeValueAsString(userRegisterResponse), HttpStatus.OK);
     }
 }
