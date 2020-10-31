@@ -44,6 +44,8 @@ public class User {
         return userName;
     }
 
+    public void setUserName(String newUserName) { this.userName = newUserName; }
+
     public String getPassword() {
         return password;
     }
@@ -72,7 +74,7 @@ public class User {
         private String password;
         private String email;
         private String introduction;
-        private List<String> preferences;
+        private List<String> preferences = new ArrayList<>();
 
         public UserBuilder setId(String id) {
             this.id = id;
