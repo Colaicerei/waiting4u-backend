@@ -16,7 +16,6 @@ import edu.osu.waiting4ubackend.request.UserUpdateRequest;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Arrays;
 
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
