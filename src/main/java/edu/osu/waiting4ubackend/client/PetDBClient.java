@@ -21,7 +21,7 @@ public class PetDBClient {
         Entity petEntity = Entity.newBuilder(key)
                 .set("petName", pet.getPetName())
                 .set("dateOfBirth", Timestamp.of(pet.getDateOfBirth()))
-                .set("dateCreated", Timestamp.now())
+                .set("dateCreated", Timestamp.of(pet.getDateCreated()))
                 .set("type", pet.getType())
                 .set("breed", pet.getBreed())
                 .set("availability", pet.getAvailability())
@@ -62,4 +62,21 @@ public class PetDBClient {
         }
 
     }
+
+    public List<Pet> getPetsByAdmin(String adminId) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.eq("adminId", adminId))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        List<Pet> petList = new ArrayList<>();
+        if (results.hasNext()) {
+            DBClientHelper.populateQueryResults(petList, results);
+        }
+        return petList;
+    }
+
+//    public Pet getPetByAdmin(long petId, String adminId) {
+//
+//    }
 }
