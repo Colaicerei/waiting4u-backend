@@ -49,6 +49,5 @@ public class DBClientHelper {
                     .build();
             list.add(pet);
         }
-
     }
 }
