@@ -79,20 +79,21 @@ public class PetController {
         return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
     }
 
-//    @CrossOrigin
-//    @GetMapping(value = "/admins/{admin_id}/pets/{pet_id}", produces = "application/json")
-//    public ResponseEntity<String> getPet(@PathVariable long adminId, long petId) {
-//        //check valid admin id
-//        AdminDBClient adminDbClient = new AdminDBClient();
-//        Admin admin = adminDbClient.getAdminById(adminId);
-//        if(admin == null) {
-//            return new ResponseEntity<>("{\"Error\":  \"Unauthorized user\"}", HttpStatus.NOT_FOUND);
-//        }
-//        //check valid pet id which associates with admin id
-//        PetDBClient petDBClient = new PetDBClient();
-//        petDBClient.getPetByAdmin(petId, String.valueOf(adminId));
-//
-//    }
-
-
+    @CrossOrigin
+    @GetMapping(value = "/admins/{admin_id}/pets/{pet_id}", produces = "application/json")
+    public ResponseEntity<String> getPet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+        if(!pet.getAdminId().equals(String.valueOf(adminId))) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return new ResponseEntity<>(objectMapper.writeValueAsString(pet), HttpStatus.OK);
+        }
+    }
 }
