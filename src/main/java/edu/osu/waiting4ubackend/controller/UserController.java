@@ -12,8 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import edu.osu.waiting4ubackend.request.UserUpdateRequest;
+
 import javax.validation.Valid;
 import java.io.IOException;
+
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
 @RestController
@@ -66,7 +69,7 @@ public class UserController {
 
     @CrossOrigin
     @GetMapping(value = "/users/{id}", produces = "application/json")
-    public ResponseEntity<String> login(@PathVariable long id) throws JsonProcessingException {
+    public ResponseEntity<String> getUser(@PathVariable long id) throws JsonProcessingException {
         UserDBClient userDBClient = new UserDBClient();
         User user = userDBClient.getUserById(id);
         //check valid user id
@@ -76,5 +79,45 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
-    }   
+    }
+
+
+    @CrossOrigin
+    @PatchMapping(value = "/users/{id}", produces = "application/json")
+    public ResponseEntity<String> updateUser(@Valid @PathVariable long id, @RequestBody UserUpdateRequest request) throws IOException{
+        UserDBClient userDBClient = new UserDBClient();
+        User user = userDBClient.getUserById(id);
+
+        //check valid user id
+        if(user == null) {
+            return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
+        }
+
+        // adding preferences will be handled by its own "apply/add" button
+        if(request.getNewPreference() != null){
+            user.addPreference(request.getNewPreference());
+            userDBClient.updatePreferences(request.getNewPreference(), id);
+        }
+
+        if(request.getUserName() != null){
+            //check duplicate userName
+           if(!request.getUserName().equals(user.getUserName()) && userDBClient.userNameExists(request.getUserName())) {
+                return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
+            }
+            user.setUserName(request.getUserName());
+        }
+
+        if(request.getPassword() != null){
+            user.setPassword(request.getPassword());
+        }
+
+        if(request.getIntroduction() != null){
+            user.setIntroduction(request.getIntroduction());
+        }
+
+        String userId = userDBClient.updateUser(user, id);
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserRegisterResponse userRegisterResponse = new UserRegisterResponse(userId, user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(userRegisterResponse), HttpStatus.OK);
+    }
 }

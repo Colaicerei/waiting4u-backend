@@ -1432,6 +1432,261 @@
 			"response": []
 		},
 		{
+			"name": "update user1 name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fab8e134-704d-43e0-8577-79ddac3439cc",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"newUser1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user1 introduction",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "662a4b3c-4495-4db3-afac-5136722c99d2",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"new introduction\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"introduction\": \"new introduction\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user1 password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f130980-6808-4e1c-98b7-9c8130de1ec8",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"new introduction\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\": \"NewPassword12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user1 duplicate name failed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50680c1b-eae4-4922-807c-e0ed69e89ef2",
+						"exec": [
+							"pm.test(\"403 status code\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"403 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The name already exists, please use another one\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"user2\",\r\n   \"introduction\": \"new introduction\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bbcfedd0-e04f-490f-b2a1-2d3159c86391",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    //pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"new introduction for user2\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\":\"NewPassword1234\",\r\n   \"introduction\": \"new introduction for user2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user2_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add pet1 201",
 			"event": [
 				{

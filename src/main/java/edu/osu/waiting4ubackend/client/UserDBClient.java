@@ -4,6 +4,9 @@ import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserDBClient {
     //user functions from here
     private static final String USERS_COLLECTION_NAME = "users";
@@ -54,6 +57,7 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
+                .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
                 .build();
         db.put(userEntity);
 
@@ -69,7 +73,43 @@ public class UserDBClient {
                 .setUserName(userEntity.getString("userName"))
                 .setEmail(userEntity.getString("email"))
                 .setIntroduction((userEntity.getString("introduction")))
+                .setPassword(userEntity.getString("password"))
+                .setPreferences(DBClientHelper.convertToList(userEntity.getList("preferences")))
                 .build();
+    }
+
+    public void updatePreferences(String newPreference, long id) {
+        Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(id);
+        Entity userEntity = db.get(key);
+        List<Value<String>> valueList = userEntity.getList("preferences");
+        List<Value<String>> list = new ArrayList<>(valueList);
+        list.add(StringValue.of(newPreference));
+        userEntity = Entity.newBuilder(db.get(key)).set("preferences", list).build();
+        db.update(userEntity);
+    }
+
+    public String updateUser(User user, long id) {
+        if (user == null) {
+            throw new IllegalArgumentException("user can't be null");
+        }
+        Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(id);
+        Entity userEntity = db.get(key);
+        if(userEntity == null) return null;
+
+        if(user.getPassword() != null){
+            userEntity = Entity.newBuilder(db.get(key))
+                    .set("password", user.getPassword()).build();
+            db.update(userEntity);
+        }
+        userEntity = Entity.newBuilder(db.get(key))
+                .set("userName", user.getUserName())
+      //          .set("email", user.getEmail())
+                .set("introduction", user.getIntroduction())
+      //          .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                .build();
+        db.update(userEntity);
+
+        return key.getId().toString();
     }
 
 }

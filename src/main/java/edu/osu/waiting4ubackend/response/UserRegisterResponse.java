@@ -2,6 +2,9 @@ package edu.osu.waiting4ubackend.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserRegisterResponse {
     @JsonProperty("user_id")
     private String id;
@@ -9,12 +12,22 @@ public class UserRegisterResponse {
     private String userName;
     private String email;
     private String introduction;
+    private List<String> preferences;
+
+    public UserRegisterResponse(String id, String userName, String email, String introduction, List<String> preferences) {
+        this.id = id;
+        this.userName = userName;
+        this.email = email;
+        this.introduction = introduction;
+        this.preferences = preferences;
+    }
 
     public UserRegisterResponse(String id, String userName, String email, String introduction) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.introduction = introduction;
+        this.preferences = new ArrayList<>();
     }
 
     public String getId() {
@@ -30,5 +43,7 @@ public class UserRegisterResponse {
     }
 
     public String getIntroduction() { return introduction; }
+
+    public List<String> getPreferences() { return preferences; }
 
 }
