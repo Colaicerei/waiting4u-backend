@@ -50,4 +50,14 @@ public class DBClientHelper {
             list.add(pet);
         }
     }
+
+    public static List<Value<String>> removePetId(List<Value<String>> list, String id) {
+        List<Value<String>> newList = new ArrayList<>();
+        for(Value<String> v : list) {
+            if(!v.get().equals(id)) {
+                newList.add(v);
+            }
+        }
+        return newList;
+    }
 }
