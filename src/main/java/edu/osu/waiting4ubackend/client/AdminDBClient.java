@@ -85,4 +85,13 @@ public class AdminDBClient {
         adminEntity = Entity.newBuilder(db.get(key)).set("pets", list).build();
         db.update(adminEntity);
     }
+
+    public void removePetByAdmin(long adminId, long petId) {
+        Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(adminId);
+        Entity adminEntity = db.get(key);
+        List<Value<String>> valueList = adminEntity.getList("pets");
+        List<Value<String>> newList = DBClientHelper.removePetId(valueList, String.valueOf(petId));
+        adminEntity = Entity.newBuilder(db.get(key)).set("pets", newList).build();
+        db.update(adminEntity);
+    }
 }
