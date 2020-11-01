@@ -95,4 +95,9 @@ public class PetDBClient {
                 .setImageUrl(petEntity.getString("imageUrl"))
                 .build();
     }
+
+    public void deletePetById(long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        db.delete(key);
+    }
 }

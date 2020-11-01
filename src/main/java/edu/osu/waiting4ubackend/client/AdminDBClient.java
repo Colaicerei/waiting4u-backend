@@ -86,7 +86,7 @@ public class AdminDBClient {
         db.update(adminEntity);
     }
 
-    public void removePetByAdmin(long adminId, long petId) {
+    public void removePetInAdminEntity(long adminId, long petId) {
         Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(adminId);
         Entity adminEntity = db.get(key);
         List<Value<String>> valueList = adminEntity.getList("pets");
