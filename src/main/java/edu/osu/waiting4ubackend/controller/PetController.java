@@ -93,4 +93,25 @@ public class PetController {
             return new ResponseEntity<>(objectMapper.writeValueAsString(pet), HttpStatus.OK);
         }
     }
+
+    @CrossOrigin
+    @DeleteMapping(value = "/admins/{admin_id}/pets/{pet_id}")
+    public ResponseEntity<String> deletePet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId) {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+        if(!pet.getAdminId().equals(String.valueOf(adminId))) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
+        }
+        //remove pet_id from pets entity of admin
+        AdminDBClient adminDBClient = new AdminDBClient();
+        adminDBClient.removePetInAdminEntity(adminId, petId);
+        //delete pet
+        petDBClient.deletePetById(petId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
