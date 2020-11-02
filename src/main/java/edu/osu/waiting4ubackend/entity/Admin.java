@@ -45,6 +45,7 @@ public class Admin {
     }
 
     public List<String> getPets() {
+
         return pets;
     }
 
@@ -57,7 +58,7 @@ public class Admin {
         private String userName;
         private String password;
         private String email;
-        private List<String> pets;
+        private List<String> pets = new ArrayList<>();
 
         public AdminBuilder setId(String id) {
             this.id = id;
