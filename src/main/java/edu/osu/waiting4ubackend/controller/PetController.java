@@ -114,4 +114,43 @@ public class PetController {
         petDBClient.deletePetById(petId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @CrossOrigin
+    @PatchMapping(value = "/admins/{admin_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> updatePet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId, @RequestBody Pet petRequest) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+        if(!pet.getAdminId().equals(String.valueOf(adminId))) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
+        }
+
+        //compare pet with current pet
+        System.out.println(pet.getAdminId());
+        System.out.println(pet.getDateCreated());
+
+        Pet newPet = new Pet.PetBuilder()
+                .setPetName(petRequest.getPetName())
+                .setDateOfBirth(petRequest.getDateOfBirth())
+                .setDateCreated(pet.getDateCreated())
+                .setType(petRequest.getType())
+                .setBreed(petRequest.getBreed())
+                .setAvailability(petRequest.getAvailability())
+                .setStatus(petRequest.getStatus())
+                .setDescription(petRequest.getDescription())
+                .setDispositions(petRequest.getDispositions())
+                .setAdminId(pet.getAdminId())
+                .setImageUrl(petRequest.getImageUrl())
+                .build();
+
+
+        Pet petResponse = petDBClient.updatePet(newPet, petId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(petResponse), HttpStatus.OK);
+
+    }
 }
