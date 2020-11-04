@@ -100,4 +100,36 @@ public class PetDBClient {
         Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
         db.delete(key);
     }
+
+    public Pet updatePet(Pet pet, long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        Entity petEntity = Entity.newBuilder(key)
+                .set("petName", pet.getPetName())
+                .set("dateOfBirth", Timestamp.of(pet.getDateOfBirth()))
+                .set("dateCreated", Timestamp.of(pet.getDateCreated()))
+                .set("type", pet.getType())
+                .set("breed", pet.getBreed())
+                .set("availability", pet.getAvailability())
+                .set("status", pet.getStatus())
+                .set("description", pet.getDescription())
+                .set("dispositions", DBClientHelper.convertToValueList(pet.getDispositions()))
+                .set("adminId", pet.getAdminId())
+                .set("imageUrl", pet.getImageUrl())
+                .build();
+        db.put(petEntity);
+        return new Pet.PetBuilder()
+                .setId(key.getId().toString())
+                .setPetName(petEntity.getString("petName"))
+                .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
+                .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setType(petEntity.getString("type"))
+                .setBreed(petEntity.getString("breed"))
+                .setAvailability(petEntity.getString("availability"))
+                .setStatus(petEntity.getString("status"))
+                .setDescription(petEntity.getString("description"))
+                .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
+                .setAdminId(petEntity.getString("adminId").toString())
+                .setImageUrl(petEntity.getString("imageUrl"))
+                .build();
+    }
 }
