@@ -95,6 +95,22 @@ public class PetController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/pets/{pet_id}", produces = "application/json")
+    public ResponseEntity<String> getPetByPublic(@PathVariable("pet_id") long petId) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return new ResponseEntity<>(objectMapper.writeValueAsString(pet), HttpStatus.OK);
+        }
+    }
+
+
+    @CrossOrigin
     @DeleteMapping(value = "/admins/{admin_id}/pets/{pet_id}")
     public ResponseEntity<String> deletePet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId) {
         //check valid pet id
