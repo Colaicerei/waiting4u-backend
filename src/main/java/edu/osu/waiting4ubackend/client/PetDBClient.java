@@ -132,4 +132,74 @@ public class PetDBClient {
                 .setImageUrl(petEntity.getString("imageUrl"))
                 .build();
     }
+
+    public List<Pet> getPetsByBreed(String breed) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.eq("breed", breed))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+
+    }
+
+    public List<Pet> getPetsByType(String type) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.eq("type", type))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+
+    }
+
+    public List<Pet> getPetsByDispositions(List<String> dispositions) {
+        List<Value<String>> list = DBClientHelper.convertToValueList(dispositions);
+        QueryResults<Entity> results = null;
+        if(list.size() == 1) {
+            Query<Entity> query = Query.newEntityQueryBuilder()
+                    .setKind(PETS_COLLECTION_NAME)
+                    .setFilter(StructuredQuery.CompositeFilter.and(
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(0))))
+                    .build();
+            results = db.run(query);
+        } else if(list.size() == 2) {
+            Query<Entity> query = Query.newEntityQueryBuilder()
+                    .setKind(PETS_COLLECTION_NAME)
+                    .setFilter(StructuredQuery.CompositeFilter.and(
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(0)),
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(1))))
+                    .build();
+            results = db.run(query);
+        } else {
+            Query<Entity> query = Query.newEntityQueryBuilder()
+                    .setKind(PETS_COLLECTION_NAME)
+                    .setFilter(StructuredQuery.CompositeFilter.and(
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(0)),
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(1)),
+                            StructuredQuery.PropertyFilter.eq("dispositions", list.get(2))))
+                    .build();
+            results = db.run(query);
+        }
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+    }
+
 }
