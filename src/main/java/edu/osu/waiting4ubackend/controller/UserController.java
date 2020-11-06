@@ -77,8 +77,8 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
+        //GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
 
 
@@ -94,7 +94,7 @@ public class UserController {
         }
 
         // adding preferences will be handled by its own "apply/add" button
-        if(request.getNewPreference() != null){
+        /*if(request.getNewPreference() != null){
             user.addPreference(request.getNewPreference());
             userDBClient.updatePreferences(request.getNewPreference(), id);
         }
@@ -105,19 +105,19 @@ public class UserController {
                 return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
             }
             user.setUserName(request.getUserName());
-        }
+        }*/
 
-        if(request.getPassword() != null){
+        // formData only send empty string instead of null if no input
+        if(request.getPassword() != ""){
             user.setPassword(request.getPassword());
         }
 
-        if(request.getIntroduction() != null){
+        if(request.getIntroduction() != user.getIntroduction()){
             user.setIntroduction(request.getIntroduction());
         }
 
         String userId = userDBClient.updateUser(user, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        UserRegisterResponse userRegisterResponse = new UserRegisterResponse(userId, user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(userRegisterResponse), HttpStatus.OK);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
 }

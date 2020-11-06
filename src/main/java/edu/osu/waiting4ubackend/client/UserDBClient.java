@@ -57,7 +57,7 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
-                .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                //.set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
                 .build();
         db.put(userEntity);
 
@@ -74,11 +74,11 @@ public class UserDBClient {
                 .setEmail(userEntity.getString("email"))
                 .setIntroduction((userEntity.getString("introduction")))
                 .setPassword(userEntity.getString("password"))
-                .setPreferences(DBClientHelper.convertToList(userEntity.getList("preferences")))
+                //.setPreferences(DBClientHelper.convertToList(userEntity.getList("preferences")))
                 .build();
     }
 
-    public void updatePreferences(String newPreference, long id) {
+    /*public void updatePreferences(String newPreference, long id) {
         Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(id);
         Entity userEntity = db.get(key);
         List<Value<String>> valueList = userEntity.getList("preferences");
@@ -86,7 +86,7 @@ public class UserDBClient {
         list.add(StringValue.of(newPreference));
         userEntity = Entity.newBuilder(db.get(key)).set("preferences", list).build();
         db.update(userEntity);
-    }
+    }*/
 
     public String updateUser(User user, long id) {
         if (user == null) {
@@ -102,7 +102,7 @@ public class UserDBClient {
             db.update(userEntity);
         }
         userEntity = Entity.newBuilder(db.get(key))
-                .set("userName", user.getUserName())
+       //         .set("userName", user.getUserName())
       //          .set("email", user.getEmail())
                 .set("introduction", user.getIntroduction())
       //          .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
