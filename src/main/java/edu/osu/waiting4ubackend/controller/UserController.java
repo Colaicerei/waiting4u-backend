@@ -84,7 +84,7 @@ public class UserController {
 
     @CrossOrigin
     @PatchMapping(value = "/users/{id}", produces = "application/json")
-    public ResponseEntity<String> updateUser(@Valid @PathVariable long id, @RequestBody UserUpdateRequest request) throws IOException{
+    public ResponseEntity<String> updateUser(@Valid @PathVariable long id, @Valid @RequestBody UserUpdateRequest request) throws IOException{
         UserDBClient userDBClient = new UserDBClient();
         User user = userDBClient.getUserById(id);
 
@@ -112,7 +112,7 @@ public class UserController {
             user.setPassword(request.getPassword());
         }
 
-        if(request.getIntroduction() != user.getIntroduction()){
+        if(!request.getIntroduction().equals(user.getIntroduction())){
             user.setIntroduction(request.getIntroduction());
         }
 
