@@ -7,30 +7,18 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class UserUpdateRequest {
-    //https://stackoverflow.com/questions/8560348/different-names-of-json-property-during-serialization-and-deserialization
-    @JsonProperty("user_name")
-    //https://phoenixnap.com/kb/spring-boot-validation-for-rest-services
-    @Size(min = 3, max = 12, message = "Name should be 3 to 12 characters")
     //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
-    @Pattern(regexp = "^\\w+(\\d+)?", message = "Name must be letters and numbers only")
-    private String userName;
-    //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
-    //@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$",
-    //    message = "Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,16}$",
+    message = "Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number")
+    @JsonProperty("new_password")
     private String password;
-    //private String email;
+    @JsonProperty("new_introduction")
     private String introduction;
-    private String newPreference;
+    //private String newPreference;
 
-    public UserUpdateRequest(String userName, String password, String introduction, String newPreference) {
-        this.userName = userName;
+    public UserUpdateRequest(String password, String introduction) {
         this.password = password;
         this.introduction = introduction;
-        this.newPreference = newPreference;
-    }
-
-    public String getUserName() {
-        return userName;
     }
 
     public String getPassword() {
@@ -39,5 +27,4 @@ public class UserUpdateRequest {
 
     public String getIntroduction() { return introduction; }
 
-    public String getNewPreference(){ return newPreference; }
 }

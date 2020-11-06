@@ -12,7 +12,7 @@ public class User {
     private String password;
     private String email;
     private String introduction;
-    private List<String> preferences;
+    //private List<String> preferences;
 
     public User(){
     }
@@ -22,7 +22,7 @@ public class User {
         this.userName = userBuilder.user_name;
         this.password = userBuilder.password;
         this.email = userBuilder.email;
-        this.preferences = userBuilder.preferences;
+        //this.preferences = userBuilder.preferences;
         this.introduction = userBuilder.introduction;
     }
 
@@ -56,17 +56,17 @@ public class User {
 
     public void setPassword(String newPassword) { this.password = newPassword; }
 
-    public List<String> getPreferences() {
+    /*public List<String> getPreferences() {
         return preferences;
-    }
+    }*/
 
     public String getIntroduction() { return introduction; }
 
     public void setIntroduction(String newIntroduction) { this.introduction = newIntroduction; }
 
-    public void addPreference(String petType){
+    /*public void addPreference(String petType){
         preferences.add(petType);
-    }
+    }*/
 
     public static class UserBuilder {
         private String id;
@@ -74,7 +74,7 @@ public class User {
         private String password;
         private String email;
         private String introduction;
-        private List<String> preferences = new ArrayList<>();
+        //private List<String> preferences = new ArrayList<>();
 
         public UserBuilder setId(String id) {
             this.id = id;
@@ -101,10 +101,10 @@ public class User {
             return this;
         }
 
-        public UserBuilder setPreferences(List<String> preferences) {
+        /*public UserBuilder setPreferences(List<String> preferences) {
             this.preferences = preferences;
             return this;
-        }
+        }*/
 
         public User build() {
             return new User(this);
