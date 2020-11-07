@@ -10,12 +10,17 @@ import edu.osu.waiting4ubackend.response.GetUserResponse;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import edu.osu.waiting4ubackend.request.UserUpdateRequest;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
@@ -23,7 +28,10 @@ import edu.osu.waiting4ubackend.response.UserLoginResponse;
 public class UserController {
     @CrossOrigin
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterRequest request) throws IOException {
+    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterRequest request, Errors errors) throws IOException {
+        if (errors.hasErrors()) {
+            return handleErrorMessage(errors);
+        }
         User user = new User.UserBuilder()
                 .setUserName(request.getUserName())
                 .setPassword(request.getPassword())
@@ -33,11 +41,11 @@ public class UserController {
 
         UserDBClient userDBClient = new UserDBClient();
         //check duplicate userName
-        if(userDBClient.userNameExists(user.getUserName())) {
+        if (userDBClient.userNameExists(user.getUserName())) {
             return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
         //check duplicate email
-        if(userDBClient.userEmailExists(user.getEmail())) {
+        if (userDBClient.userEmailExists(user.getEmail())) {
             return new ResponseEntity<>("{\"Error\":  \"The email already exists, please use another one\"}", HttpStatus.FORBIDDEN);
         }
 
@@ -58,7 +66,7 @@ public class UserController {
         UserDBClient userDbClient = new UserDBClient();
         //get id if user exists
         String userId = userDbClient.userExists(user);
-        if(userId == null) {
+        if (userId == null) {
             return new ResponseEntity<>("{\"Error\":  \"Email or password do not match our records\"}", HttpStatus.UNAUTHORIZED);
         } else {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -73,7 +81,7 @@ public class UserController {
         UserDBClient userDBClient = new UserDBClient();
         User user = userDBClient.getUserById(id);
         //check valid user id
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -84,12 +92,16 @@ public class UserController {
 
     @CrossOrigin
     @PatchMapping(value = "/users/{id}", produces = "application/json")
-    public ResponseEntity<String> updateUser(@Valid @PathVariable long id, @Valid @RequestBody UserUpdateRequest request) throws IOException{
+    public ResponseEntity<String> updateUser(@PathVariable long id, @Valid @RequestBody UserUpdateRequest request, Errors errors) throws Exception {
+        if (errors.hasErrors()) {
+            return handleErrorMessage(errors);
+        }
+
         UserDBClient userDBClient = new UserDBClient();
         User user = userDBClient.getUserById(id);
 
         //check valid user id
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
 
@@ -108,11 +120,11 @@ public class UserController {
         }*/
 
         // formData only send empty string instead of null if no input
-        if(request.getPassword() != ""){
+        if (request.getPassword() != "") {
             user.setPassword(request.getPassword());
         }
 
-        if(!request.getIntroduction().equals(user.getIntroduction())){
+        if (!request.getIntroduction().equals(user.getIntroduction())) {
             user.setIntroduction(request.getIntroduction());
         }
 
@@ -120,4 +132,21 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
+
+
+    public ResponseEntity<String> handleErrorMessage(Errors errors) {
+        List<ConstraintViolation<?>> violationsList = new ArrayList<>();
+        for (ObjectError e : errors.getAllErrors()) {
+            violationsList.add(e.unwrap(ConstraintViolation.class));
+        }
+        String exceptionMessage = "{\"Error\": \"" ;
+        for (ConstraintViolation<?> violation : violationsList) {
+            exceptionMessage += violation.getPropertyPath() + ": " + violation.getMessage() + " ";
+        }
+        exceptionMessage += "\"}";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
+    }
+
 }
