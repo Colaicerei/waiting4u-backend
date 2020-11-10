@@ -627,6 +627,93 @@
 			"response": []
 		},
 		{
+			"name": "update admin password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "05235284-633d-4a85-9d55-48b2c288be44",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"password\"]).to.eq(\"NewPassword123\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\": \"NewPassword123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/admins/{{admin1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins",
+						"{{admin1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update admin1 invalid password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3b49e605-6d1a-4f3e-b904-c122f00cfb21",
+						"exec": [
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"password\": \"Pass1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/admins/{{admin1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"admins",
+						"{{admin1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add user1 201 with empty introduction",
 			"event": [
 				{
@@ -667,7 +754,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\",\r\n   \"introduction\": \"\"\r\n}\r\n"
+					"raw": "{\r\n   \"user_name\":\"user1\",\r\n   \"password\":\"Password1234\",\r\n   \"email\":\"user1@oregonstate.edu\",\r\n   \"introduction\": \"\"\r\n}\r\n",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -984,9 +1074,9 @@
 							"    pm.response.to.have.status(400);",
 							"});",
 							"",
-							"/*pm.test(\"400 error message\", function () {",
-							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number\");",
-							"});*/",
+							"pm.test(\"400 error message\", function () {",
+							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"password: Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number \");",
+							"});",
 							"",
 							""
 						],
@@ -1005,7 +1095,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"Password\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}"
+					"raw": "{\r\n   \"user_name\":\"user3\",\r\n   \"password\":\"Password\",\r\n   \"email\":\"user3@oregonstate.edu\"\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "{{app_url}}/users",
@@ -1358,10 +1451,10 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user1\");",
+							"    pm.expect(pm.response.json()[\"userName\"]).to.eq(\"user1\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
 							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
 							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
@@ -1401,10 +1494,10 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
+							"    pm.expect(pm.response.json()[\"userName\"]).to.eq(\"user2\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user2@oregonstate.edu\");",
-							"    pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
 							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
 							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"I am super!\");",
 							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
@@ -1432,58 +1525,6 @@
 			"response": []
 		},
 		{
-			"name": "update user1 name",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "fab8e134-704d-43e0-8577-79ddac3439cc",
-						"exec": [
-							"pm.test(\"200 status code\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
-							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
-							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
-							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
-							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
-							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
-							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
-							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"newUser1\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{app_url}}/users/{{user1_id}}",
-					"host": [
-						"{{app_url}}"
-					],
-					"path": [
-						"users",
-						"{{user1_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "update user1 introduction",
 			"event": [
 				{
@@ -1496,7 +1537,7 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
 							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
@@ -1536,19 +1577,19 @@
 			"response": []
 		},
 		{
-			"name": "update user1 password",
+			"name": "update user1 introduction and password",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "5f130980-6808-4e1c-98b7-9c8130de1ec8",
+						"id": "eaf00d9d-35ab-497b-ba68-beb0b344d733",
 						"exec": [
 							"pm.test(\"200 status code\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
 							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
@@ -1567,7 +1608,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"password\": \"NewPassword12345\"\r\n}",
+					"raw": "{\r\n   \"introduction\": \"new introduction\",\r\n   \"password\": \"New1111111\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1588,21 +1629,16 @@
 			"response": []
 		},
 		{
-			"name": "update user1 duplicate name failed",
+			"name": "update user1 invalid password",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "50680c1b-eae4-4922-807c-e0ed69e89ef2",
+						"id": "8161ec41-b56c-41b8-9f25-95dd290e9228",
 						"exec": [
-							"pm.test(\"403 status code\", function () {",
-							"    pm.response.to.have.status(403);",
+							"pm.test(\"400 status code\", function () {",
+							"    pm.response.to.have.status(400);",
 							"});",
-							"",
-							"pm.test(\"403 error message\", function () {",
-							"     pm.expect(pm.response.json()[\"Error\"]).to.eq(\"The name already exists, please use another one\");",
-							"});",
-							"",
 							""
 						],
 						"type": "text/javascript"
@@ -1614,7 +1650,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user_name\":\"user2\",\r\n   \"introduction\": \"new introduction\"\r\n}",
+					"raw": "{\r\n   \"password\": \"Pass1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1647,7 +1683,7 @@
 							"});",
 							"",
 							"pm.test(\"content is valid\", function () {",
-							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"user2\");",
+							"    pm.expect(pm.response.json()[\"userName\"]).to.eq(\"user2\");",
 							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
 							"    //pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
 							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
@@ -1932,6 +1968,58 @@
 					"path": [
 						"pets",
 						"{{pet2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user1 name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fab8e134-704d-43e0-8577-79ddac3439cc",
+						"exec": [
+							"pm.test(\"200 status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"content is valid\", function () {",
+							"    pm.expect(pm.response.json()[\"user_name\"]).to.eq(\"newUser1\");",
+							"    //pm.expect(pm.response.json()[\"password\"]).to.eq(\"Password1234\");",
+							"    pm.expect(pm.response.json()[\"email\"]).to.eq(\"user1@oregonstate.edu\");",
+							"    //pm.expect(pm.response.json()[\"preferences\"]).to.eq(null);",
+							"    //pm.expect(pm.response.json()[\"preferences\"].length).to.eq(0);",
+							"    pm.expect(pm.response.json()[\"introduction\"]).to.eq(\"\");",
+							"    //const self_url = pm.environment.get(\"app_url\") + \"/users/\" + pm.response.json()[\"id\"];",
+							"    //pm.expect(pm.response.json()[\"self\"]).to.eq(self_url);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user_name\":\"newUser1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/users/{{user1_id}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"users",
+						"{{user1_id}}"
 					]
 				}
 			},
