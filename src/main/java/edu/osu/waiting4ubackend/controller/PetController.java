@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.client.PetDBClient;
+import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.Pet;
 import org.springframework.http.HttpStatus;
@@ -49,20 +50,15 @@ public class PetController {
     @CrossOrigin
     @GetMapping(value = "/pets", produces = "application/json")
     public ResponseEntity<String> getPets(@RequestParam(required = false) String breed, @RequestParam(required = false) String type, @RequestParam(required = false) List<String> dispositions) throws JsonProcessingException {
-        List<Pet> petList = null;
         PetDBClient petDBClient = new PetDBClient();
-        if(breed == null && type == null && dispositions == null) {
-            petList = petDBClient.getPets();
-        } else if (breed != null) {
-            petList = petDBClient.getPetsByBreed(breed);
-        } else if(type != null) {
-            petList = petDBClient.getPetsByType(type);
-        } else {
-            petList = petDBClient.getPetsByDispositions(dispositions);
-        }
+        List<Pet> petList = petDBClient.filter(new PetSearchQueryBuilder()
+                .setBreed(breed)
+                .setType(type)
+                .setDispositions(dispositions)
+                .build());
 
         if(petList == null) {
-            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("", HttpStatus.OK);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
