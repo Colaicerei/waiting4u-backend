@@ -48,9 +48,23 @@ public class PetController {
      */
     @CrossOrigin
     @GetMapping(value = "/pets", produces = "application/json")
-    public ResponseEntity<String> getPets() throws JsonProcessingException {
+    public ResponseEntity<String> getPets(@RequestParam(required = false) String breed, @RequestParam(required = false) String type, @RequestParam(required = false) List<String> dispositions) throws JsonProcessingException {
+        List<Pet> petList = null;
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> petList = petDBClient.getPets();
+        if(breed == null && type == null && dispositions == null) {
+            petList = petDBClient.getPets();
+        } else if (breed != null) {
+            petList = petDBClient.getPetsByBreed(breed);
+        } else if(type != null) {
+            petList = petDBClient.getPetsByType(type);
+        } else {
+            petList = petDBClient.getPetsByDispositions(dispositions);
+        }
+
+        if(petList == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
     }
@@ -95,6 +109,22 @@ public class PetController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/pets/{pet_id}", produces = "application/json")
+    public ResponseEntity<String> getPetByPublic(@PathVariable("pet_id") long petId) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return new ResponseEntity<>(objectMapper.writeValueAsString(pet), HttpStatus.OK);
+        }
+    }
+
+
+    @CrossOrigin
     @DeleteMapping(value = "/admins/{admin_id}/pets/{pet_id}")
     public ResponseEntity<String> deletePet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId) {
         //check valid pet id
@@ -113,5 +143,41 @@ public class PetController {
         //delete pet
         petDBClient.deletePetById(petId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/admins/{admin_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> updatePet(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId, @RequestBody Pet petRequest) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+        if(!pet.getAdminId().equals(String.valueOf(adminId))) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
+        }
+
+        //compare pet with current pet
+        Pet newPet = new Pet.PetBuilder()
+                .setPetName(petRequest.getPetName())
+                .setDateOfBirth(petRequest.getDateOfBirth())
+                .setDateCreated(pet.getDateCreated())
+                .setType(petRequest.getType())
+                .setBreed(petRequest.getBreed())
+                .setAvailability(petRequest.getAvailability())
+                .setStatus(petRequest.getStatus())
+                .setDescription(petRequest.getDescription())
+                .setDispositions(petRequest.getDispositions())
+                .setAdminId(pet.getAdminId())
+                .setImageUrl(petRequest.getImageUrl())
+                .build();
+
+
+        Pet petResponse = petDBClient.updatePet(newPet, petId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(petResponse), HttpStatus.OK);
+
     }
 }

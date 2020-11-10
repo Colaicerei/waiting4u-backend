@@ -9,19 +9,19 @@ public class UserUpdateRequest {
             message = "Password should be 8 to 16 characters and contains at least one uppercase, one lowercase and one number")
     private String password;
     private String introduction;
-    private String newPreference;
+    //private String newPreference;
 
-    public UserUpdateRequest(String password, String introduction, String newPreference) {
+    public UserUpdateRequest(String password, String introduction) {
         this.password = password;
         this.introduction = introduction;
-        this.newPreference = newPreference;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public String getIntroduction() { return introduction; }
+    public String getIntroduction() {
+        return introduction;
+    }
 
-    public String getNewPreference(){ return newPreference; }
 }

@@ -11,14 +11,14 @@ public class GetUserResponse {
     private String userName;
     private String email;
     private String introduction;
-    private List<String> preferences;
+    //private List<String> preferences;
 
-    public GetUserResponse(String id, String userName, String email, String introduction, List<String> preferences) {
+    public GetUserResponse(String id, String userName, String email, String introduction) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.introduction = introduction;
-        this.preferences = preferences;
+        //this.preferences = preferences;
     }
 
     public String getId() {
@@ -35,7 +35,7 @@ public class GetUserResponse {
 
     public String getIntroduction(){ return introduction; }
 
-    public List<String> getPreferences() {
+    /*public List<String> getPreferences() {
         return preferences;
-    }
+    }*/
 }
