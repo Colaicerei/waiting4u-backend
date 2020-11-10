@@ -6,6 +6,7 @@ import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.request.AdminLoginRequest;
 import edu.osu.waiting4ubackend.request.AdminRegisterRequest;
+import edu.osu.waiting4ubackend.request.AdminUpdateRequest;
 import edu.osu.waiting4ubackend.response.AdminLoginResponse;
 import edu.osu.waiting4ubackend.response.GetAdminResponse;
 import edu.osu.waiting4ubackend.response.AdminRegisterResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import org.springframework.validation.Errors;
 
 @RestController
 public class AdminController {
@@ -23,7 +25,10 @@ public class AdminController {
     //https://stackoverflow.com/questions/24292373/spring-boot-rest-controller-how-to-return-different-http-status-codes
     @CrossOrigin
     @PostMapping(value = "/admins", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> register(@Valid @RequestBody AdminRegisterRequest request) throws IOException {
+    public ResponseEntity<String> register(@Valid @RequestBody AdminRegisterRequest request, Errors errors) throws IOException {
+        if (errors.hasErrors()) {
+            return ControllerHelper.displayErrorMessage(errors);
+        }
         Admin admin = new Admin.AdminBuilder()
                 .setUserName(request.getAdminName())
                 .setPassword(request.getPassword())
@@ -78,6 +83,32 @@ public class AdminController {
         }
         ObjectMapper objectMapper = new ObjectMapper();
         GetAdminResponse getAdminResponse = new GetAdminResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(getAdminResponse), HttpStatus.OK);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(admin), HttpStatus.OK);
+    }
+
+
+    @CrossOrigin
+    @PatchMapping(value = "/admins/{id}", produces = "application/json")
+    public ResponseEntity<String> updateAdmin(@PathVariable long id, @Valid @RequestBody AdminUpdateRequest request, Errors errors) throws Exception {
+        if (errors.hasErrors()) {
+            return ControllerHelper.displayErrorMessage(errors);
+        }
+
+        AdminDBClient adminDBClient = new AdminDBClient();
+        Admin admin = adminDBClient.getAdminById(id);
+
+        //check valid admin id
+        if (admin == null) {
+            return new ResponseEntity<>("{\"Error\":  \"The admin doesn't exist\"}", HttpStatus.NOT_FOUND);
+        }
+
+        // formData only send empty string instead of null if no input
+        if (request.getPassword() != "") {
+            admin.setPassword(request.getPassword());
+        }
+
+        String adminId = adminDBClient.updateAdmin(admin, id);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(admin), HttpStatus.OK);
     }
 }

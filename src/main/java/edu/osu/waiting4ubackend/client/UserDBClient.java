@@ -1,7 +1,6 @@
 package edu.osu.waiting4ubackend.client;
 
 import com.google.cloud.datastore.*;
-import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.User;
 
 import java.util.ArrayList;

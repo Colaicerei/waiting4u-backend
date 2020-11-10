@@ -42,7 +42,7 @@ public class AdminDBClient {
                                 StructuredQuery.PropertyFilter.eq("password", admin.getPassword())))
                 .build();
         QueryResults<Entity> results = db.run(query);
-        if(!results.hasNext()) {
+        if (!results.hasNext()) {
             return null;
         } else {
             Entity entity = results.next();
@@ -66,13 +66,30 @@ public class AdminDBClient {
     public Admin getAdminById(long id) {
         Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(id);
         Entity adminEntity = db.get(key);
-        if(adminEntity == null) return null;
+        if (adminEntity == null) return null;
         return new Admin.AdminBuilder()
                 .setId(key.getId().toString())
                 .setUserName(adminEntity.getString("userName"))
                 .setEmail(adminEntity.getString("email"))
+                .setPassword(adminEntity.getString("password"))
                 .setPets(DBClientHelper.convertToList(adminEntity.getList("pets")))
                 .build();
+    }
+
+    public String updateAdmin(Admin admin, long id) {
+        if (admin == null) {
+            throw new IllegalArgumentException("Admin can't be null");
+        }
+        Key key = db.newKeyFactory().setKind(ADMINS_COLLECTION_NAME).newKey(id);
+        Entity adminEntity = db.get(key);
+        if (adminEntity == null) return null;
+
+        if (admin.getPassword() != null) {
+            adminEntity = Entity.newBuilder(db.get(key))
+                    .set("password", admin.getPassword()).build();
+            db.update(adminEntity);
+        }
+        return key.getId().toString();
     }
 
     public void updatePetEntity(String petId, long adminId) {
