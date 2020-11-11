@@ -6,23 +6,20 @@ import edu.osu.waiting4ubackend.client.UserDBClient;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserLoginRequest;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
-import edu.osu.waiting4ubackend.response.GetUserResponse;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
 import edu.osu.waiting4ubackend.request.UserUpdateRequest;
+import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import edu.osu.waiting4ubackend.response.UserLoginResponse;
+import org.springframework.validation.Errors;
 
 @RestController
 public class UserController {
@@ -30,7 +27,7 @@ public class UserController {
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@Valid @RequestBody UserRegisterRequest request, Errors errors) throws IOException {
         if (errors.hasErrors()) {
-            return handleErrorMessage(errors);
+            return ControllerHelper.displayErrorMessage(errors);
         }
         User user = new User.UserBuilder()
                 .setUserName(request.getUserName())
@@ -94,7 +91,7 @@ public class UserController {
     @PatchMapping(value = "/users/{id}", produces = "application/json")
     public ResponseEntity<String> updateUser(@PathVariable long id, @Valid @RequestBody UserUpdateRequest request, Errors errors) throws Exception {
         if (errors.hasErrors()) {
-            return handleErrorMessage(errors);
+            return ControllerHelper.displayErrorMessage(errors);
         }
 
         UserDBClient userDBClient = new UserDBClient();
@@ -104,20 +101,6 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
-
-        // adding preferences will be handled by its own "apply/add" button
-        /*if(request.getNewPreference() != null){
-            user.addPreference(request.getNewPreference());
-            userDBClient.updatePreferences(request.getNewPreference(), id);
-        }
-
-        if(request.getUserName() != null){
-            //check duplicate userName
-           if(!request.getUserName().equals(user.getUserName()) && userDBClient.userNameExists(request.getUserName())) {
-                return new ResponseEntity<>("{\"Error\":  \"The name already exists, please use another one\"}", HttpStatus.FORBIDDEN);
-            }
-            user.setUserName(request.getUserName());
-        }*/
 
         // formData only send empty string instead of null if no input
         if (request.getPassword() != "") {
@@ -132,21 +115,4 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
-
-
-    public ResponseEntity<String> handleErrorMessage(Errors errors) {
-        List<ConstraintViolation<?>> violationsList = new ArrayList<>();
-        for (ObjectError e : errors.getAllErrors()) {
-            violationsList.add(e.unwrap(ConstraintViolation.class));
-        }
-        String exceptionMessage = "{\"Error\": \"" ;
-        for (ConstraintViolation<?> violation : violationsList) {
-            exceptionMessage += violation.getPropertyPath() + ": " + violation.getMessage() + " ";
-        }
-        exceptionMessage += "\"}";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
-    }
-
 }

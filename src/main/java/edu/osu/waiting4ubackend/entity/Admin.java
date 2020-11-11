@@ -40,6 +40,8 @@ public class Admin {
         return password;
     }
 
+    public void setPassword(String newPassword) { this.password = newPassword; }
+
     public String getEmail() {
         return email;
     }
