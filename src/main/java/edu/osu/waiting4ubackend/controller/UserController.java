@@ -9,12 +9,16 @@ import edu.osu.waiting4ubackend.request.UserRegisterRequest;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import edu.osu.waiting4ubackend.request.UserUpdateRequest;
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+
 import org.springframework.validation.Errors;
 
 @RestController
@@ -111,4 +115,5 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
+
 }

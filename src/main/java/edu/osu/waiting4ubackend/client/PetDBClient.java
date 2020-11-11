@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PetDBClient {
-    private static final String PETS_COLLECTION_NAME = "pets";
+    public static final String PETS_COLLECTION_NAME = "pets";
     private Datastore db;
 
     public PetDBClient() {
@@ -43,7 +43,7 @@ public class PetDBClient {
                 .setStatus(petEntity.getString("status"))
                 .setDescription(petEntity.getString("description"))
                 .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
-                .setAdminId(petEntity.getString("adminId").toString())
+                .setAdminId(petEntity.getString("adminId"))
                 .setImageUrl(petEntity.getString("imageUrl"))
                 .build();
     }
@@ -91,7 +91,7 @@ public class PetDBClient {
                 .setStatus(petEntity.getString("status"))
                 .setDescription(petEntity.getString("description"))
                 .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
-                .setAdminId(petEntity.getString("adminId").toString())
+                .setAdminId(petEntity.getString("adminId"))
                 .setImageUrl(petEntity.getString("imageUrl"))
                 .build();
     }
@@ -99,5 +99,48 @@ public class PetDBClient {
     public void deletePetById(long petId) {
         Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
         db.delete(key);
+    }
+
+    public Pet updatePet(Pet pet, long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        Entity petEntity = Entity.newBuilder(key)
+                .set("petName", pet.getPetName())
+                .set("dateOfBirth", Timestamp.of(pet.getDateOfBirth()))
+                .set("dateCreated", Timestamp.of(pet.getDateCreated()))
+                .set("type", pet.getType())
+                .set("breed", pet.getBreed())
+                .set("availability", pet.getAvailability())
+                .set("status", pet.getStatus())
+                .set("description", pet.getDescription())
+                .set("dispositions", DBClientHelper.convertToValueList(pet.getDispositions()))
+                .set("adminId", pet.getAdminId())
+                .set("imageUrl", pet.getImageUrl())
+                .build();
+        db.put(petEntity);
+        return new Pet.PetBuilder()
+                .setId(key.getId().toString())
+                .setPetName(petEntity.getString("petName"))
+                .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
+                .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setType(petEntity.getString("type"))
+                .setBreed(petEntity.getString("breed"))
+                .setAvailability(petEntity.getString("availability"))
+                .setStatus(petEntity.getString("status"))
+                .setDescription(petEntity.getString("description"))
+                .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
+                .setAdminId(petEntity.getString("adminId"))
+                .setImageUrl(petEntity.getString("imageUrl"))
+                .build();
+    }
+
+    public List<Pet> filter(Query<Entity> query) {
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
     }
 }
