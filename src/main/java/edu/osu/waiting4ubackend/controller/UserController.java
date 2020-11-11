@@ -115,5 +115,4 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
-
 }

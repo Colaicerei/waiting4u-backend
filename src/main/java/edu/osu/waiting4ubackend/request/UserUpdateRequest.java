@@ -11,7 +11,6 @@ public class UserUpdateRequest {
     private String introduction;
     //private String newPreference;
 
-
     public UserUpdateRequest(String password, String introduction) {
         this.password = password;
         this.introduction = introduction;
