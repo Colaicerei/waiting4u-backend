@@ -198,4 +198,16 @@ public class  PetController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(newStatus), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/pets/status", produces = "application/json")
+    public ResponseEntity<String> getStatus() throws JsonProcessingException {
+        PetDBClient petDBClient = new PetDBClient();
+        List<Pet> petList = petDBClient.getLatestThreeUpdates();
+        if(petList == null) {
+            return new ResponseEntity<>("", HttpStatus.OK);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
+    }
 }

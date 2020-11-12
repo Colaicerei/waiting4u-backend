@@ -61,4 +61,33 @@ public class DBClientHelper {
         }
         return newList;
     }
+
+    public static void populateStatusResults(List<Pet> list, QueryResults<Entity> results) {
+        int count = 0;
+        while (results.hasNext() && count < 3) {
+            Entity petEntity = results.next();
+            List<String> statusList = DBClientHelper.convertToList(petEntity.getList("status"));
+            List<String> res = new ArrayList<>();
+            if(statusList.size() != 0) {
+                res.add(statusList.get(statusList.size() - 1));
+            }
+            Pet pet = new Pet.PetBuilder()
+                    .setId(petEntity.getKey().getId().toString())
+                    .setPetName(petEntity.getString("petName"))
+                    .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
+                    .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                    .setDateUpdated(petEntity.getTimestamp("dateUpdated").toDate())
+                    .setType(petEntity.getString("type"))
+                    .setBreed(petEntity.getString("breed"))
+                    .setAvailability(petEntity.getString("availability"))
+                    .setStatus(res)
+                    .setDescription(petEntity.getString("description"))
+                    .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
+                    .setAdminId(petEntity.getString("adminId"))
+                    .setImageUrl(petEntity.getString("imageUrl"))
+                    .build();
+            list.add(pet);
+            count++;
+        }
+    }
 }
