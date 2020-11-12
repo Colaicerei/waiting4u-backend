@@ -24,6 +24,7 @@ public class PetController {
                 .setPetName(petRequest.getPetName())
                 .setDateOfBirth(petRequest.getDateOfBirth())
                 .setDateCreated(new Date())
+                .setDateUpdated(new Date())
                 .setType(petRequest.getType())
                 .setBreed(petRequest.getBreed())
                 .setAvailability(petRequest.getAvailability())
@@ -154,22 +155,23 @@ public class PetController {
         if(!pet.getAdminId().equals(String.valueOf(adminId))) {
             return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
         }
+        System.out.println(pet.getStatus());
 
         //compare pet with current pet
         Pet newPet = new Pet.PetBuilder()
                 .setPetName(petRequest.getPetName())
                 .setDateOfBirth(petRequest.getDateOfBirth())
                 .setDateCreated(pet.getDateCreated())
+                .setDateUpdated(pet.getDateUpdated())
                 .setType(petRequest.getType())
                 .setBreed(petRequest.getBreed())
+                .setStatus(pet.getStatus())
                 .setAvailability(petRequest.getAvailability())
-                .setStatus(petRequest.getStatus())
                 .setDescription(petRequest.getDescription())
                 .setDispositions(petRequest.getDispositions())
                 .setAdminId(pet.getAdminId())
                 .setImageUrl(petRequest.getImageUrl())
                 .build();
-
 
         Pet petResponse = petDBClient.updatePet(newPet, petId);
         ObjectMapper objectMapper = new ObjectMapper();
