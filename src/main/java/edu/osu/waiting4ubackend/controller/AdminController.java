@@ -64,7 +64,7 @@ public class AdminController {
         //check duplicate existing admin
         String adminId = adminDbClient.adminExists(admin);
         if(adminId == null) {
-            return new ResponseEntity<>("{\"Error\":  \"The admin doesn't exist\"}", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("{\"Error\":  \"Email or password do not match our records\"}", HttpStatus.UNAUTHORIZED);
         } else {
             ObjectMapper objectMapper = new ObjectMapper();
             AdminLoginResponse adminLoginResponse = new AdminLoginResponse(adminId);
@@ -83,7 +83,7 @@ public class AdminController {
         }
         ObjectMapper objectMapper = new ObjectMapper();
         GetAdminResponse getAdminResponse = new GetAdminResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(admin), HttpStatus.OK);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getAdminResponse), HttpStatus.OK);
     }
 
 
@@ -103,12 +103,17 @@ public class AdminController {
         }
 
         // formData only send empty string instead of null if no input
-        if (request.getPassword() != "") {
-            admin.setPassword(request.getPassword());
+        if (request.getNewPassword() != null && !request.getNewPassword().trim().isEmpty()) {
+            if(request.getExistingPassword().equals(admin.getPassword())){
+                admin.setPassword(request.getNewPassword());
+            }else{
+                return new ResponseEntity<>("{\"Error\":  \"Unauthorized operation: existing password does not match our record\"}", HttpStatus.FORBIDDEN);
+            }
         }
 
         String adminId = adminDBClient.updateAdmin(admin, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        return new ResponseEntity<>(objectMapper.writeValueAsString(admin), HttpStatus.OK);
+        GetAdminResponse getAdminResponse = new GetAdminResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getAdminResponse), HttpStatus.OK);
     }
 }

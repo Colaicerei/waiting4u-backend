@@ -6,6 +6,7 @@ import edu.osu.waiting4ubackend.client.UserDBClient;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserLoginRequest;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
+import edu.osu.waiting4ubackend.response.GetUserResponse;
 import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,8 +83,8 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        //GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreferences());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 
 
@@ -103,8 +104,12 @@ public class UserController {
         }
 
         // formData only send empty string instead of null if no input
-        if (request.getPassword() != "") {
-            user.setPassword(request.getPassword());
+        if (request.getNewPassword() != null && !request.getNewPassword().trim().isEmpty()) {
+            if(request.getExistingPassword().equals(user.getPassword())){
+                user.setPassword(request.getNewPassword());
+            }else{
+                return new ResponseEntity<>("{\"Error\":  \"Unauthorized operation: existing password does not match our record\"}", HttpStatus.FORBIDDEN);
+            }
         }
 
         if (!request.getIntroduction().equals(user.getIntroduction())) {
@@ -113,6 +118,7 @@ public class UserController {
 
         String userId = userDBClient.updateUser(user, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        return new ResponseEntity<>(objectMapper.writeValueAsString(user), HttpStatus.OK);
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 }
