@@ -6,6 +6,7 @@ import edu.osu.waiting4ubackend.entity.Pet;
 import sun.security.krb5.internal.PAEncTSEnc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PetDBClient {
@@ -147,4 +148,17 @@ public class PetDBClient {
             return petList;
         }
     }
+
+    public List<String> updateStatus(List<String> newStatus, Date date, long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        Entity petEntity = db.get(key);
+        petEntity = Entity.newBuilder(db.get(key))
+                .set("status", DBClientHelper.convertToValueList(newStatus))
+                .set("dateUpdated", Timestamp.of(date))
+                .build();
+        db.update(petEntity);
+        return DBClientHelper.convertToList(petEntity.getList("status"));
+    }
+
+
 }

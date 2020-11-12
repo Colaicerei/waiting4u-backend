@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-public class PetController {
+public class  PetController {
     @CrossOrigin
     @PostMapping(value = "/admins/{id}/pets", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createPet(@PathVariable long id, @RequestBody Pet petRequest) throws JsonProcessingException {
@@ -155,7 +155,6 @@ public class PetController {
         if(!pet.getAdminId().equals(String.valueOf(adminId))) {
             return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
         }
-        System.out.println(pet.getStatus());
 
         //compare pet with current pet
         Pet newPet = new Pet.PetBuilder()
@@ -177,5 +176,26 @@ public class PetController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petResponse), HttpStatus.OK);
 
+    }
+
+    @CrossOrigin
+    @PatchMapping(value = "/admins/{admin_id}/pets/{pet_id}/status", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> updateStatus(@PathVariable("admin_id") long adminId, @PathVariable("pet_id")long petId, @RequestBody Pet petRequest) throws JsonProcessingException {
+        //check valid pet id
+        PetDBClient petDBClient = new PetDBClient();
+        //check valid pet id which associates with admin id
+        Pet pet = petDBClient.getPetById(petId);
+        if(pet == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Pet not found\"}", HttpStatus.NOT_FOUND);
+        }
+        if(!pet.getAdminId().equals(String.valueOf(adminId))) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized admin\"}", HttpStatus.UNAUTHORIZED);
+        }
+
+        List<String> newStatus = ControllerHelper.petStatusHelper(pet.getStatus(), petRequest.getStatus());
+        newStatus = petDBClient.updateStatus(newStatus, new Date(), petId);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(newStatus), HttpStatus.OK);
     }
 }

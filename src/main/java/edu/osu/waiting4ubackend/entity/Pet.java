@@ -24,7 +24,7 @@ public class Pet {
     @JsonProperty("date_created")
     private Date dateCreated;
     private Date dateUpdated;
-    private String availability = "available";
+    private String availability = "Available";
     private List<String> status = new ArrayList<>();;
     private String description;
     @JsonProperty("admin_id")
@@ -130,7 +130,7 @@ public class Pet {
         private Date dateOfBirth;
         private Date dateCreated;
         private Date dateUpdated;
-        private String availability = "available";
+        private String availability = "Available";
         private List<String> status = new ArrayList<>();
         private String description;
         private String adminId = "";
