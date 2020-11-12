@@ -160,5 +160,17 @@ public class PetDBClient {
         return DBClientHelper.convertToList(petEntity.getList("status"));
     }
 
-
+    public List<Pet> getLatestThreeUpdates() {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setOrderBy(StructuredQuery.OrderBy.desc("dateUpdated")).build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateStatusResults(petList, results);
+            return petList;
+        }
+    }
 }
