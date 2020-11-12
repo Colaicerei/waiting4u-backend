@@ -23,8 +23,9 @@ public class Pet {
     private Date dateOfBirth;
     @JsonProperty("date_created")
     private Date dateCreated;
-    private String availability = "available";
-    private String status = "";
+    private Date dateUpdated;
+    private String availability = "Available";
+    private List<String> status = new ArrayList<>();;
     private String description;
     @JsonProperty("admin_id")
     private String adminId;
@@ -43,6 +44,7 @@ public class Pet {
         this.breed = petBuilder.breed;
         this.dateOfBirth = petBuilder.dateOfBirth;
         this.dateCreated = petBuilder.dateCreated;
+        this.dateUpdated = petBuilder.dateUpdated;
         this.availability = petBuilder.availability;
         this.status = petBuilder.status;
         this.description = petBuilder.description;
@@ -71,11 +73,13 @@ public class Pet {
 
     public Date getDateCreated() { return  dateCreated; }
 
+    public Date getDateUpdated() { return dateUpdated; }
+
     public String getAvailability() {
         return availability;
     }
 
-    public String getStatus() {
+    public List<String> getStatus() {
         return status;
     }
 
@@ -91,14 +95,14 @@ public class Pet {
     }
 
     public void setAvailability(String s) {
-        if(s != null) {
+        if(s.length() != 0) {
             availability = s;
         }
     }
 
-    public void setStatus(String s) {
-        if(s != null) {
-            status = s;
+    public void setStatus(List<String> list) {
+        if(list != null) {
+            status = list;
         }
     }
 
@@ -125,8 +129,9 @@ public class Pet {
         private String breed;
         private Date dateOfBirth;
         private Date dateCreated;
-        private String availability = "available";
-        private String status = "";
+        private Date dateUpdated;
+        private String availability = "Available";
+        private List<String> status = new ArrayList<>();
         private String description;
         private String adminId = "";
         private List<String> dispositions = new ArrayList<>();
@@ -162,12 +167,17 @@ public class Pet {
             return this;
         }
 
+        public PetBuilder setDateUpdated(Date dateUpdated) {
+            this.dateUpdated = dateUpdated;
+            return this;
+        }
+
         public PetBuilder setAvailability(String availability) {
             this.availability = availability;
             return this;
         }
 
-        public PetBuilder setStatus(String status) {
+        public PetBuilder setStatus(List<String> status) {
             this.status = status;
             return this;
         }

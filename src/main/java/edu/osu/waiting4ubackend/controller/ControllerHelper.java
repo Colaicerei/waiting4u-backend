@@ -26,4 +26,13 @@ public class ControllerHelper {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
+
+    public static List<String> petStatusHelper(List<String> petStatus, List<String> newStatus) {
+        for(String status : newStatus) {
+            if(status.length() != 0) {
+                petStatus.add(status);
+            }
+        }
+        return petStatus;
+    }
 }

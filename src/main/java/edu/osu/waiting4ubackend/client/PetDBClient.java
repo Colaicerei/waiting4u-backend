@@ -6,6 +6,7 @@ import edu.osu.waiting4ubackend.entity.Pet;
 import sun.security.krb5.internal.PAEncTSEnc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PetDBClient {
@@ -22,10 +23,11 @@ public class PetDBClient {
                 .set("petName", pet.getPetName())
                 .set("dateOfBirth", Timestamp.of(pet.getDateOfBirth()))
                 .set("dateCreated", Timestamp.of(pet.getDateCreated()))
+                .set("dateUpdated", Timestamp.of(pet.getDateUpdated()))
                 .set("type", pet.getType())
                 .set("breed", pet.getBreed())
                 .set("availability", pet.getAvailability())
-                .set("status", pet.getStatus())
+                .set("status", DBClientHelper.convertToValueList(pet.getStatus()))
                 .set("description", pet.getDescription())
                 .set("dispositions", DBClientHelper.convertToValueList(pet.getDispositions()))
                 .set("adminId", pet.getAdminId())
@@ -37,10 +39,11 @@ public class PetDBClient {
                 .setPetName(petEntity.getString("petName"))
                 .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
                 .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setDateUpdated(petEntity.getTimestamp("dateUpdated").toDate())
                 .setType(petEntity.getString("type"))
                 .setBreed(petEntity.getString("breed"))
                 .setAvailability(petEntity.getString("availability"))
-                .setStatus(petEntity.getString("status"))
+                .setStatus(DBClientHelper.convertToList(petEntity.getList("status")))
                 .setDescription(petEntity.getString("description"))
                 .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
                 .setAdminId(petEntity.getString("adminId"))
@@ -48,20 +51,19 @@ public class PetDBClient {
                 .build();
     }
 
-    public List<Pet> getPets() {
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind(PETS_COLLECTION_NAME)
-                .build();
-        QueryResults<Entity> results = db.run(query);
-        if(!results.hasNext()) {
-            return null;
-        } else {
-            List<Pet> petList = new ArrayList<>();
-            DBClientHelper.populateQueryResults(petList, results);
-            return petList;
-        }
-
-    }
+//    public List<Pet> getPets() {
+//        Query<Entity> query = Query.newEntityQueryBuilder()
+//                .setKind(PETS_COLLECTION_NAME)
+//                .build();
+//        QueryResults<Entity> results = db.run(query);
+//        if(!results.hasNext()) {
+//            return null;
+//        } else {
+//            List<Pet> petList = new ArrayList<>();
+//            DBClientHelper.populateQueryResults(petList, results);
+//            return petList;
+//        }
+//    }
 
     public List<Pet> getPetsByAdmin(String adminId) {
         Query<Entity> query = Query.newEntityQueryBuilder()
@@ -85,10 +87,11 @@ public class PetDBClient {
                 .setPetName(petEntity.getString("petName"))
                 .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
                 .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setDateUpdated(petEntity.getTimestamp("dateUpdated").toDate())
                 .setType(petEntity.getString("type"))
                 .setBreed(petEntity.getString("breed"))
                 .setAvailability(petEntity.getString("availability"))
-                .setStatus(petEntity.getString("status"))
+                .setStatus(DBClientHelper.convertToList(petEntity.getList("status")))
                 .setDescription(petEntity.getString("description"))
                 .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
                 .setAdminId(petEntity.getString("adminId"))
@@ -107,10 +110,11 @@ public class PetDBClient {
                 .set("petName", pet.getPetName())
                 .set("dateOfBirth", Timestamp.of(pet.getDateOfBirth()))
                 .set("dateCreated", Timestamp.of(pet.getDateCreated()))
+                .set("dateUpdated", Timestamp.of(pet.getDateUpdated()))
                 .set("type", pet.getType())
                 .set("breed", pet.getBreed())
+                .set("status", DBClientHelper.convertToValueList(pet.getStatus()))
                 .set("availability", pet.getAvailability())
-                .set("status", pet.getStatus())
                 .set("description", pet.getDescription())
                 .set("dispositions", DBClientHelper.convertToValueList(pet.getDispositions()))
                 .set("adminId", pet.getAdminId())
@@ -122,10 +126,11 @@ public class PetDBClient {
                 .setPetName(petEntity.getString("petName"))
                 .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
                 .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
+                .setDateUpdated(petEntity.getTimestamp("dateUpdated").toDate())
                 .setType(petEntity.getString("type"))
                 .setBreed(petEntity.getString("breed"))
+                .setStatus(DBClientHelper.convertToList(petEntity.getList("status")))
                 .setAvailability(petEntity.getString("availability"))
-                .setStatus(petEntity.getString("status"))
                 .setDescription(petEntity.getString("description"))
                 .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
                 .setAdminId(petEntity.getString("adminId"))
@@ -143,4 +148,17 @@ public class PetDBClient {
             return petList;
         }
     }
+
+    public List<String> updateStatus(List<String> newStatus, Date date, long petId) {
+        Key key = db.newKeyFactory().setKind(PETS_COLLECTION_NAME).newKey(petId);
+        Entity petEntity = db.get(key);
+        petEntity = Entity.newBuilder(db.get(key))
+                .set("status", DBClientHelper.convertToValueList(newStatus))
+                .set("dateUpdated", Timestamp.of(date))
+                .build();
+        db.update(petEntity);
+        return DBClientHelper.convertToList(petEntity.getList("status"));
+    }
+
+
 }
