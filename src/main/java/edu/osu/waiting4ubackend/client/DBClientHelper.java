@@ -5,6 +5,7 @@ import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Value;
 import edu.osu.waiting4ubackend.entity.Pet;
+import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,31 +63,20 @@ public class DBClientHelper {
         return newList;
     }
 
-    public static void populateStatusResults(List<Pet> list, QueryResults<Entity> results) {
+    public static void populateStatusResults(List<GetUpdatesResponse> list, QueryResults<Entity> results) {
         int count = 0;
         while (results.hasNext() && count < 3) {
             Entity petEntity = results.next();
+            String id = petEntity.getKey().getId().toString();
+            String petName = petEntity.getString("petName");
+            String imageUrl = petEntity.getString("imageUrl");
             List<String> statusList = DBClientHelper.convertToList(petEntity.getList("status"));
-            List<String> res = new ArrayList<>();
+            List<String> status = new ArrayList<>();
             if(statusList.size() != 0) {
-                res.add(statusList.get(statusList.size() - 1));
+                status.add(statusList.get(statusList.size() - 1));
             }
-            Pet pet = new Pet.PetBuilder()
-                    .setId(petEntity.getKey().getId().toString())
-                    .setPetName(petEntity.getString("petName"))
-                    .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
-                    .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
-                    .setDateUpdated(petEntity.getTimestamp("dateUpdated").toDate())
-                    .setType(petEntity.getString("type"))
-                    .setBreed(petEntity.getString("breed"))
-                    .setAvailability(petEntity.getString("availability"))
-                    .setStatus(res)
-                    .setDescription(petEntity.getString("description"))
-                    .setDispositions(DBClientHelper.convertToList(petEntity.getList("dispositions")))
-                    .setAdminId(petEntity.getString("adminId"))
-                    .setImageUrl(petEntity.getString("imageUrl"))
-                    .build();
-            list.add(pet);
+            GetUpdatesResponse getUpdatesResponse = new GetUpdatesResponse(id, petName, status, imageUrl);
+            list.add(getUpdatesResponse);
             count++;
         }
     }

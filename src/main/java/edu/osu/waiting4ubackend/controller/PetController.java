@@ -7,6 +7,7 @@ import edu.osu.waiting4ubackend.client.PetDBClient;
 import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.Pet;
+import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -203,7 +204,7 @@ public class  PetController {
     @GetMapping(value = "/pets/status", produces = "application/json")
     public ResponseEntity<String> getStatus() throws JsonProcessingException {
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> petList = petDBClient.getLatestThreeUpdates();
+        List<GetUpdatesResponse> petList = petDBClient.getLatestThreeUpdates();
         if(petList == null) {
             return new ResponseEntity<>("", HttpStatus.OK);
         }

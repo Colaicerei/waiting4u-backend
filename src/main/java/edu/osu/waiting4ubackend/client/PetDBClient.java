@@ -3,6 +3,7 @@ package edu.osu.waiting4ubackend.client;
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
+import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 import sun.security.krb5.internal.PAEncTSEnc;
 
 import java.util.ArrayList;
@@ -160,7 +161,7 @@ public class PetDBClient {
         return DBClientHelper.convertToList(petEntity.getList("status"));
     }
 
-    public List<Pet> getLatestThreeUpdates() {
+    public List<GetUpdatesResponse> getLatestThreeUpdates() {
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(PETS_COLLECTION_NAME)
                 .setOrderBy(StructuredQuery.OrderBy.desc("dateUpdated")).build();
@@ -168,7 +169,7 @@ public class PetDBClient {
         if(!results.hasNext()) {
             return null;
         } else {
-            List<Pet> petList = new ArrayList<>();
+            List<GetUpdatesResponse> petList = new ArrayList<>();
             DBClientHelper.populateStatusResults(petList, results);
             return petList;
         }
