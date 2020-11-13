@@ -2,7 +2,10 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.osu.waiting4ubackend.client.PetDBClient;
+import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.client.UserDBClient;
+import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserLoginRequest;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
@@ -19,6 +22,7 @@ import edu.osu.waiting4ubackend.response.UserLoginResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.validation.Errors;
 

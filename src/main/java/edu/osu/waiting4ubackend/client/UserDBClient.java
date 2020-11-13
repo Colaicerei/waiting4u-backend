@@ -1,7 +1,15 @@
 package edu.osu.waiting4ubackend.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.datastore.*;
+import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.entity.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,4 +119,24 @@ public class UserDBClient {
         return key.getId().toString();
     }
 
+
+    // get all user emails
+    public List<String> getUserEmails() {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(USERS_COLLECTION_NAME)
+                //.setFilter(StructuredQuery.PropertyFilter.eq("preference", preference))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if (!results.hasNext()) {
+            return null;
+        } else {
+            List<String> userEmailList = new ArrayList<>();
+            while (results.hasNext()) {
+                Entity userEntity = results.next();
+                String userEmail = userEntity.getString("email");
+                userEmailList.add(userEmail);
+            }
+            return userEmailList;
+        }
+    }
 }
