@@ -7,8 +7,7 @@ import com.google.cloud.datastore.Value;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 //https://stackoverflow.com/questions/48389765/google-cloud-datastore-api-how-to-add-string-array-list
 //https://developers.google.com/protocol-buffers/docs/reference/java/com/google/protobuf/StringValue
@@ -79,5 +78,19 @@ public class DBClientHelper {
             list.add(getUpdatesResponse);
             count++;
         }
+    }
+
+    public static void sortByDateCreadted(List<Pet> petList) {
+        Collections.sort(petList, new Comparator<Pet>(){
+            @Override
+            public int compare(Pet p1, Pet p2) {
+                long date1 = p1.getDateCreated().getTime();
+                long date2 = p2.getDateCreated().getTime();
+                if(date1 == date2) {
+                    return 0;
+                }
+                return date2 < date1 ? -1 : 1;
+            }
+        });
     }
 }

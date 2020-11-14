@@ -4,7 +4,6 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
-import sun.security.krb5.internal.PAEncTSEnc;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -146,6 +145,7 @@ public class PetDBClient {
         } else {
             List<Pet> petList = new ArrayList<>();
             DBClientHelper.populateQueryResults(petList, results);
+            DBClientHelper.sortByDateCreadted(petList);
             return petList;
         }
     }
