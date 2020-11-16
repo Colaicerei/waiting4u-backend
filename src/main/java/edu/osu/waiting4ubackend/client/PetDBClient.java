@@ -174,4 +174,15 @@ public class PetDBClient {
             return petList;
         }
     }
+
+    public List<Pet> sort(Query<Entity> query) {
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+    }
 }

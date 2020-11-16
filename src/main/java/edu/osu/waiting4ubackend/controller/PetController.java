@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.client.PetDBClient;
 import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
+import edu.osu.waiting4ubackend.client.PetSortQueryBuilder;
 import edu.osu.waiting4ubackend.entity.Admin;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,13 +53,26 @@ public class  PetController {
      */
     @CrossOrigin
     @GetMapping(value = "/pets", produces = "application/json")
-    public ResponseEntity<String> getPets(@RequestParam(required = false) String breed, @RequestParam(required = false) String type, @RequestParam(required = false) List<String> dispositions) throws JsonProcessingException {
+    public ResponseEntity<String> getPets(
+            @RequestParam(required = false) String breed,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) List<String> dispositions,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String order) throws JsonProcessingException {
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> petList = petDBClient.filter(new PetSearchQueryBuilder()
-                .setBreed(breed)
-                .setType(type)
-                .setDispositions(dispositions)
-                .build());
+        List<Pet> petList;
+        if(sort != null && order != null) {
+            petList = petDBClient.sort(new PetSortQueryBuilder()
+                    .setSort(sort)
+                    .setOrder(order)
+                    .build());
+        } else {
+            petList = petDBClient.filter(new PetSearchQueryBuilder()
+                    .setBreed(breed)
+                    .setType(type)
+                    .setDispositions(dispositions)
+                    .build());
+        }
 
         if(petList == null) {
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -66,6 +81,7 @@ public class  PetController {
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
     }
+
     /*
      * Method: getPetsByAdmin
      * RequestBody: N/A
