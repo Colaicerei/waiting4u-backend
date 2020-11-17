@@ -87,7 +87,7 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 
@@ -120,9 +120,13 @@ public class UserController {
             user.setIntroduction(request.getIntroduction());
         }
 
+        if (request.getPreference() != null && !request.getPreference().trim().isEmpty() && !request.getPreference().equals(user.getPreference())) {
+            user.setPreference(request.getPreference());
+        }
+
         String userId = userDBClient.updateUser(user, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 }

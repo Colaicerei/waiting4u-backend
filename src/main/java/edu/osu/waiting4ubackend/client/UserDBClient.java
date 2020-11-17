@@ -1,15 +1,7 @@
 package edu.osu.waiting4ubackend.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.datastore.*;
-import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.entity.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +56,7 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
-                //.set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                .set("preference", "Weekly")
                 .build();
         db.put(userEntity);
 
@@ -79,9 +71,9 @@ public class UserDBClient {
                 .setId(key.getId().toString())
                 .setUserName(userEntity.getString("userName"))
                 .setEmail(userEntity.getString("email"))
-                .setIntroduction((userEntity.getString("introduction")))
+                .setIntroduction(userEntity.getString("introduction"))
                 .setPassword(userEntity.getString("password"))
-                //.setPreferences(DBClientHelper.convertToList(userEntity.getList("preferences")))
+                .setPreference(userEntity.getString("preference"))
                 .build();
     }
 
@@ -112,7 +104,7 @@ public class UserDBClient {
        //         .set("userName", user.getUserName())
       //          .set("email", user.getEmail())
                 .set("introduction", user.getIntroduction())
-      //          .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                .set("preference", user.getPreference())
                 .build();
         db.update(userEntity);
 
@@ -121,10 +113,10 @@ public class UserDBClient {
 
 
     // get all user emails
-    public List<String> getUserEmails() {
+    public List<String> getUserEmails(String preference) {
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(USERS_COLLECTION_NAME)
-                //.setFilter(StructuredQuery.PropertyFilter.eq("preference", preference))
+                .setFilter(StructuredQuery.PropertyFilter.eq("preference", preference))
                 .build();
         QueryResults<Entity> results = db.run(query);
         if (!results.hasNext()) {

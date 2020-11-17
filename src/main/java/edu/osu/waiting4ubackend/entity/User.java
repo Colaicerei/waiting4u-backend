@@ -9,7 +9,7 @@ public class User {
     private String password;
     private String email;
     private String introduction;
-    //private String preference;
+    private String preference;
 
     public User(){
     }
@@ -19,7 +19,7 @@ public class User {
         this.userName = userBuilder.user_name;
         this.password = userBuilder.password;
         this.email = userBuilder.email;
-        //this.preference = userBuilder.preference;
+        this.preference = userBuilder.preference;
         this.introduction = userBuilder.introduction;
     }
 
@@ -27,7 +27,7 @@ public class User {
         this.userName = userName;
         this.password = password;
         this.email = email;
-        this.preference = "ON";
+        this.preference = "Weekly";
         this.introduction = introduction;
     }*/
 
@@ -53,17 +53,17 @@ public class User {
 
     public void setPassword(String newPassword) { this.password = newPassword; }
 
-    /*public String getPreference() {
+    public String getPreference() {
         return preference;
-    }*/
+    }
 
     public String getIntroduction() { return introduction; }
 
     public void setIntroduction(String newIntroduction) { this.introduction = newIntroduction; }
 
-    /*public void setPreference(String preference){
-        this.preference = newPreference;
-    }*/
+    public void setPreference(String preference){
+        this.preference = preference;
+    }
 
     public static class UserBuilder {
         private String id;
@@ -71,7 +71,7 @@ public class User {
         private String password;
         private String email;
         private String introduction;
-        //private String preference;
+        private String preference;
 
         public UserBuilder setId(String id) {
             this.id = id;
@@ -98,10 +98,10 @@ public class User {
             return this;
         }
 
-        /*public UserBuilder setPreference(<String preference) {
+        public UserBuilder setPreference(String preference) {
             this.preference = preference;
             return this;
-        }*/
+        }
 
         public User build() {
             return new User(this);
