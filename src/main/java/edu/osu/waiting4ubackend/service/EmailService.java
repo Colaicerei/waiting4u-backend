@@ -1,5 +1,6 @@
 package edu.osu.waiting4ubackend.service;
 
+import edu.osu.waiting4ubackend.entity.Pet;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 
 @Service
@@ -16,11 +20,14 @@ public class EmailService {
 
     private JavaMailSender javaMailSender;
 
-    public EmailService(JavaMailSender javaMailSender) {
+    private TemplateEngine templateEngine;
+
+    public EmailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
+        this.templateEngine = templateEngine;
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String toEmail, String subject, String message) {
+    /*public void sendMail(String toEmail, String subject, String message) {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -31,23 +38,22 @@ public class EmailService {
         mailMessage.setFrom("waiting4u@gmail.com");
 
         javaMailSender.send(mailMessage);
-    }
+    }*/
 
-    //https://mkyong.com/spring-boot/spring-boot-how-to-send-email-via-smtp/
-    /*public void sendMailWithAttachment(String toEmail, String subject, String message) throws MessagingException, IOException {
+    //https://springhow.com/spring-boot-email-thymeleaf/
+    public void sendMail(String toEmail, String subject, List<Pet> pets) throws MessagingException {
+        Context context = new Context();
+        context.setVariable("pets", pets);
 
-        MimeMailMessage mailMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true);
+        String process = templateEngine.process("emailTemplate", context);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
         helper.setTo(toEmail);
         helper.setSubject(subject);
-        helper.setText(message);
+        helper.setText(process, true);
 
-        helper.setFrom("waiting4u.news@gmail.com");
-        helper.addAttachment("my_photo.png", new ClassPathResource("android.png"));
-
-        javaMailSender.send(mailMessage);
-    }*/
-
+        javaMailSender.send(mimeMessage);
+    }
 }
 
