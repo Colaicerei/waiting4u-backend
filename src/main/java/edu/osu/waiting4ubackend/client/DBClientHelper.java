@@ -5,9 +5,9 @@ import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StringValue;
 import com.google.cloud.datastore.Value;
 import edu.osu.waiting4ubackend.entity.Pet;
+import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 //https://stackoverflow.com/questions/48389765/google-cloud-datastore-api-how-to-add-string-array-list
 //https://developers.google.com/protocol-buffers/docs/reference/java/com/google/protobuf/StringValue
@@ -60,5 +60,37 @@ public class DBClientHelper {
             }
         }
         return newList;
+    }
+
+    public static void populateStatusResults(List<GetUpdatesResponse> list, QueryResults<Entity> results) {
+        int count = 0;
+        while (results.hasNext() && count < 3) {
+            Entity petEntity = results.next();
+            String id = petEntity.getKey().getId().toString();
+            String petName = petEntity.getString("petName");
+            String imageUrl = petEntity.getString("imageUrl");
+            List<String> statusList = DBClientHelper.convertToList(petEntity.getList("status"));
+            List<String> status = new ArrayList<>();
+            if(statusList.size() != 0) {
+                status.add(statusList.get(statusList.size() - 1));
+            }
+            GetUpdatesResponse getUpdatesResponse = new GetUpdatesResponse(id, petName, status, imageUrl);
+            list.add(getUpdatesResponse);
+            count++;
+        }
+    }
+
+    public static void sortByDateCreadted(List<Pet> petList) {
+        Collections.sort(petList, new Comparator<Pet>(){
+            @Override
+            public int compare(Pet p1, Pet p2) {
+                long date1 = p1.getDateCreated().getTime();
+                long date2 = p2.getDateCreated().getTime();
+                if(date1 == date2) {
+                    return 0;
+                }
+                return date2 < date1 ? -1 : 1;
+            }
+        });
     }
 }

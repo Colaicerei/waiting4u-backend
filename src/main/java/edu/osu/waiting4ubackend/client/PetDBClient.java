@@ -3,7 +3,7 @@ package edu.osu.waiting4ubackend.client;
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
-import sun.security.krb5.internal.PAEncTSEnc;
+import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,6 +145,7 @@ public class PetDBClient {
         } else {
             List<Pet> petList = new ArrayList<>();
             DBClientHelper.populateQueryResults(petList, results);
+            DBClientHelper.sortByDateCreadted(petList);
             return petList;
         }
     }
@@ -160,5 +161,28 @@ public class PetDBClient {
         return DBClientHelper.convertToList(petEntity.getList("status"));
     }
 
+    public List<GetUpdatesResponse> getLatestThreeUpdates() {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setOrderBy(StructuredQuery.OrderBy.desc("dateUpdated")).build();
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<GetUpdatesResponse> petList = new ArrayList<>();
+            DBClientHelper.populateStatusResults(petList, results);
+            return petList;
+        }
+    }
 
+    public List<Pet> sort(Query<Entity> query) {
+        QueryResults<Entity> results = db.run(query);
+        if(!results.hasNext()) {
+            return null;
+        } else {
+            List<Pet> petList = new ArrayList<>();
+            DBClientHelper.populateQueryResults(petList, results);
+            return petList;
+        }
+    }
 }
