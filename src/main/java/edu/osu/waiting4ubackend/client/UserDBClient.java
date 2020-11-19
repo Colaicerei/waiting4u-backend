@@ -56,7 +56,7 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
-                //.set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                .set("preference", "Weekly")
                 .build();
         db.put(userEntity);
 
@@ -71,9 +71,9 @@ public class UserDBClient {
                 .setId(key.getId().toString())
                 .setUserName(userEntity.getString("userName"))
                 .setEmail(userEntity.getString("email"))
-                .setIntroduction((userEntity.getString("introduction")))
+                .setIntroduction(userEntity.getString("introduction"))
                 .setPassword(userEntity.getString("password"))
-                //.setPreferences(DBClientHelper.convertToList(userEntity.getList("preferences")))
+                .setPreference(userEntity.getString("preference"))
                 .build();
     }
 
@@ -104,11 +104,31 @@ public class UserDBClient {
        //         .set("userName", user.getUserName())
       //          .set("email", user.getEmail())
                 .set("introduction", user.getIntroduction())
-      //          .set("preferences", DBClientHelper.convertToValueList(user.getPreferences()))
+                .set("preference", user.getPreference())
                 .build();
         db.update(userEntity);
 
         return key.getId().toString();
     }
 
+
+    // get all user emails
+    public List<String> getUserEmails(String preference) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(USERS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.eq("preference", preference))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+        if (!results.hasNext()) {
+            return null;
+        } else {
+            List<String> userEmailList = new ArrayList<>();
+            while (results.hasNext()) {
+                Entity userEntity = results.next();
+                String userEmail = userEntity.getString("email");
+                userEmailList.add(userEmail);
+            }
+            return userEmailList;
+        }
+    }
 }

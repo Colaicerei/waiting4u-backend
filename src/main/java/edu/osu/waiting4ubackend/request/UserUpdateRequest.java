@@ -10,12 +10,13 @@ public class UserUpdateRequest {
     private String introduction;
     @JsonProperty("existing_password")
     private String existingPassword;
-    //private String newPreference;
+    private String preference;
 
-    public UserUpdateRequest(String existingPassword, String newPassword, String introduction) {
+    public UserUpdateRequest(String existingPassword, String newPassword, String introduction, String preference) {
         this.existingPassword = existingPassword;
         this.newPassword = newPassword;
         this.introduction = introduction;
+        this.preference = preference;
     }
 
     public String getExistingPassword() {
@@ -29,5 +30,7 @@ public class UserUpdateRequest {
     public String getIntroduction() {
         return introduction;
     }
+
+    public String getPreference() { return preference; }
 
 }

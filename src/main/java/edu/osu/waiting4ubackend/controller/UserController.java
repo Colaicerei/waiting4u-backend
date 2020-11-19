@@ -2,7 +2,10 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.osu.waiting4ubackend.client.PetDBClient;
+import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.client.UserDBClient;
+import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.entity.User;
 import edu.osu.waiting4ubackend.request.UserLoginRequest;
 import edu.osu.waiting4ubackend.request.UserRegisterRequest;
@@ -19,6 +22,7 @@ import edu.osu.waiting4ubackend.response.UserLoginResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.validation.Errors;
 
@@ -83,7 +87,7 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 
@@ -116,9 +120,13 @@ public class UserController {
             user.setIntroduction(request.getIntroduction());
         }
 
+        if (request.getPreference() != null && !request.getPreference().trim().isEmpty() && !request.getPreference().equals(user.getPreference())) {
+            user.setPreference(request.getPreference());
+        }
+
         String userId = userDBClient.updateUser(user, id);
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction());
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 }
