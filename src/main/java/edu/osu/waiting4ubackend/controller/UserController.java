@@ -154,7 +154,10 @@ public class UserController {
         PetDBClient petDbClient = new PetDBClient();
         for(String petId: petIdList){
             Pet pet = petDbClient.getPetById(Long.parseLong(petId));
-            petList.add(pet);
+            // delete pets should also remove it from user wishlist, but have not been implemented yet
+            if(pet != null) {
+                petList.add(pet);
+            }
         }
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);

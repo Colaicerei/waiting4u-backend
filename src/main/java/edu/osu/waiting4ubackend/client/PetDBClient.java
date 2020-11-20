@@ -190,17 +190,18 @@ public class PetDBClient {
         }
     }
 
-    // https://github.com/GoogleCloudPlatform/getting-started-java/blob/master/bookshelf-standard/3-binary-data/src/main/java/com/example/getstarted/util/DatastoreSessionFilter.java
+    // https://stackoverflow.com/questions/11882926/how-to-subtract-x-day-from-a-date-object-in-java
     public List<Pet> getPetsByDays(int days) {
-        //Date date = new Date();
-        //long time = date.getTime();
-        //Timestamp ts = new Timestamp(time);
-        DateTimeFormatter DTF = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
-        DateTime dt = DateTime.now(DateTimeZone.UTC);
+        Date date = new Date();
+        Date past = new DateTime(date).minusDays(days).toDate();
+
+        //DateTimeFormatter DTF = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
+        //DateTime dt = DateTime.now(DateTimeZone.UTC);
+        System.out.println(Timestamp.of(past));
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(PETS_COLLECTION_NAME)
-                .setFilter(StructuredQuery.PropertyFilter.gt("date_created", dt.minusDays(days).toString(DTF)))
+                //.setFilter(StructuredQuery.PropertyFilter.ge("date_created", Timestamp.of(past)))
                 .build();
         QueryResults<Entity> results = db.run(query);
 
