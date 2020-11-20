@@ -1,5 +1,8 @@
 package edu.osu.waiting4ubackend.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Entity for User class
  */
@@ -10,6 +13,7 @@ public class User {
     private String email;
     private String introduction;
     private String preference;
+    private List<String> favoritePets;
 
     public User(){
     }
@@ -21,6 +25,7 @@ public class User {
         this.email = userBuilder.email;
         this.preference = userBuilder.preference;
         this.introduction = userBuilder.introduction;
+        this.favoritePets = userBuilder.favoritePets;
     }
 
     /*public User(String userName, String password, String email, String introduction) {
@@ -65,6 +70,15 @@ public class User {
         this.preference = preference;
     }
 
+    public List<String> getFavoritePets() {
+
+        return favoritePets;
+    }
+
+    public void addFavoritePet(String petId) {
+        favoritePets.add(petId);
+    }
+
     public static class UserBuilder {
         private String id;
         private String user_name;
@@ -72,6 +86,7 @@ public class User {
         private String email;
         private String introduction;
         private String preference;
+        private List<String> favoritePets = new ArrayList<>();
 
         public UserBuilder setId(String id) {
             this.id = id;
@@ -100,6 +115,11 @@ public class User {
 
         public UserBuilder setPreference(String preference) {
             this.preference = preference;
+            return this;
+        }
+
+        public UserBuilder setFavoritePets(List<String> pets) {
+            this.favoritePets = pets;
             return this;
         }
 

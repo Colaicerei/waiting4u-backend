@@ -4,6 +4,10 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,5 +188,26 @@ public class PetDBClient {
             DBClientHelper.populateQueryResults(petList, results);
             return petList;
         }
+    }
+
+    // https://github.com/GoogleCloudPlatform/getting-started-java/blob/master/bookshelf-standard/3-binary-data/src/main/java/com/example/getstarted/util/DatastoreSessionFilter.java
+    public List<Pet> getPetsByDays(int days) {
+        //Date date = new Date();
+        //long time = date.getTime();
+        //Timestamp ts = new Timestamp(time);
+        DateTimeFormatter DTF = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
+        DateTime dt = DateTime.now(DateTimeZone.UTC);
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.gt("date_created", dt.minusDays(days).toString(DTF)))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+
+        List<Pet> petList = new ArrayList<>();
+        if (results.hasNext()) {
+            DBClientHelper.populateQueryResults(petList, results);
+        }
+        return petList;
     }
 }

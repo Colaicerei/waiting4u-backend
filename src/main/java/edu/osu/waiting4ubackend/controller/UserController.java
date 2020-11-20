@@ -2,6 +2,7 @@ package edu.osu.waiting4ubackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.osu.waiting4ubackend.client.AdminDBClient;
 import edu.osu.waiting4ubackend.client.PetDBClient;
 import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.client.UserDBClient;
@@ -22,6 +23,7 @@ import edu.osu.waiting4ubackend.response.UserLoginResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.validation.Errors;
@@ -128,5 +130,15 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
+    }
+
+
+    @CrossOrigin
+    @PostMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> addFavoritePet(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
+        //update favoritePets in user table
+        UserDBClient userDBClient = new UserDBClient();
+        userDBClient.updateFavoritePets(userId, petId);
+        return getUser(userId);
     }
 }

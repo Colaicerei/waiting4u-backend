@@ -57,6 +57,7 @@ public class UserDBClient {
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
                 .set("preference", "Weekly")
+                .set("favoritePets", DBClientHelper.convertToValueList(user.getFavoritePets()))
                 .build();
         db.put(userEntity);
 
@@ -74,6 +75,7 @@ public class UserDBClient {
                 .setIntroduction(userEntity.getString("introduction"))
                 .setPassword(userEntity.getString("password"))
                 .setPreference(userEntity.getString("preference"))
+                .setFavoritePets(DBClientHelper.convertToList(userEntity.getList("favoritePets")))
                 .build();
     }
 
@@ -130,5 +132,25 @@ public class UserDBClient {
             }
             return userEmailList;
         }
+    }
+
+
+    public void updateFavoritePets(long userId, String petId) {
+        Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(userId);
+        Entity userEntity = db.get(key);
+        List<Value<String>> valueList = userEntity.getList("favoritePets");
+        System.out.println(valueList);
+        List<Value<String>> list = new ArrayList<>(valueList);
+
+        // if pet is not in the list, add it to the list, otherwise remove it from the list
+        if(list.contains(petId)){
+            List<Value<String>> newList = DBClientHelper.removePetId(valueList, petId);
+            userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", newList).build();
+        }else{
+            list.add(StringValue.of(petId));
+            userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", list).build();
+        }
+
+        db.update(userEntity);
     }
 }

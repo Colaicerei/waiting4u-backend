@@ -29,7 +29,8 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> dailyPetList = petDBClient.getPets();
+        List<Pet> dailyPetList = petDBClient.getPetsByDays(1);
+
         for (String email : dailyList) {
             emailService.sendMail(email, "Daily updates", dailyPetList);
             System.out.println("daily email sent to " + email);
@@ -46,7 +47,7 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> weeklyPetList = petDBClient.getPets();
+        List<Pet> weeklyPetList = petDBClient.getPetsByDays(7);
         for (String email : weeklyList) {
             emailService.sendMail(email, "Weekly updates", weeklyPetList);
         }
@@ -62,7 +63,7 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> monthlyPetList = petDBClient.getPets();
+        List<Pet> monthlyPetList = petDBClient.getPetsByDays(30);
         for (String email : monthlyList) {
             emailService.sendMail(email, "Monthly updates", monthlyPetList);
             System.out.println("monthly email sent to " + email);
