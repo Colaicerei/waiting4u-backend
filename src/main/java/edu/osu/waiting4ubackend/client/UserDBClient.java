@@ -143,7 +143,7 @@ public class UserDBClient {
         List<Value<String>> list = new ArrayList<>(valueList);
 
         // if pet is not in the list, add it to the list, otherwise remove it from the list
-        if(list.contains(petId)){
+        if(list.contains(StringValue.of(petId))){
             List<Value<String>> newList = DBClientHelper.removePetId(valueList, petId);
             userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", newList).build();
         }else{
