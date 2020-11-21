@@ -56,7 +56,7 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
-                .set("preference", "Weekly")
+                .set("preference", user.getPreference())
                 .set("favoritePets", DBClientHelper.convertToValueList(user.getFavoritePets()))
                 .build();
         db.put(userEntity);

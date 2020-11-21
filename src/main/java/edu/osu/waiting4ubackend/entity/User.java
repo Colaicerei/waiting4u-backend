@@ -85,7 +85,7 @@ public class User {
         private String password;
         private String email;
         private String introduction;
-        private String preference;
+        private String preference = "Weekly";
         private List<String> favoritePets = new ArrayList<>();
 
         public UserBuilder setId(String id) {

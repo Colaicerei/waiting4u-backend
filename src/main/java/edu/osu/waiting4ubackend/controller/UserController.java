@@ -149,8 +149,8 @@ public class UserController {
 
     // user view - get favorite pets
     @CrossOrigin
-    @GetMapping(value = "/users/{user_id}/pets", produces = "application/json")
-    public ResponseEntity<String> getUserPets(@PathVariable("user_id") long id) throws JsonProcessingException {
+    @GetMapping(value = "/users/{user_id}/favorites", produces = "application/json")
+    public ResponseEntity<String> getFavoritePets(@PathVariable("user_id") long id) throws JsonProcessingException {
         //check valid admin id
         UserDBClient userDbClient = new UserDBClient();
         User user = userDbClient.getUserById(id);

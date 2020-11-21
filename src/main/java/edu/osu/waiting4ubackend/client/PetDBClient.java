@@ -84,7 +84,7 @@ public class PetDBClient {
         Entity petEntity = db.get(key);
         if(petEntity == null) return null;
         return new Pet.PetBuilder()
-                .setId(key. getId().toString())
+                .setId(key.getId().toString())
                 .setPetName(petEntity.getString("petName"))
                 .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
                 .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
