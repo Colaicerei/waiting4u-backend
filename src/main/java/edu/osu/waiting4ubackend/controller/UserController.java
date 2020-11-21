@@ -130,14 +130,22 @@ public class UserController {
 
 
     @CrossOrigin
-    @PostMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> addFavoritePet(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
-        //update favoritePets in user table
+        //add to favoritePets
         UserDBClient userDBClient = new UserDBClient();
-        userDBClient.updateFavoritePets(userId, petId);
+        userDBClient.updateFavoritePets(userId, petId, "add");
         return getUser(userId);
     }
 
+    @CrossOrigin
+    @DeleteMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> removePetFromFavorites(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
+        //add to favoritePets
+        UserDBClient userDBClient = new UserDBClient();
+        userDBClient.updateFavoritePets(userId, petId, "remove");
+        return getUser(userId);
+    }
 
     // user view - get favorite pets
     @CrossOrigin

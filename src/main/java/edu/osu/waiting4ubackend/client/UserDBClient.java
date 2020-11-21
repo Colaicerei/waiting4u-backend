@@ -135,7 +135,7 @@ public class UserDBClient {
     }
 
 
-    public void updateFavoritePets(long userId, String petId) {
+    public void updateFavoritePets(long userId, String petId, String operation) {
         Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(userId);
         Entity userEntity = db.get(key);
         List<Value<String>> valueList = userEntity.getList("favoritePets");
@@ -143,12 +143,14 @@ public class UserDBClient {
         List<Value<String>> list = new ArrayList<>(valueList);
 
         // if pet is not in the list, add it to the list, otherwise remove it from the list
-        if(list.contains(StringValue.of(petId))){
+        if(operation.equals("remove") && list.contains(StringValue.of(petId))){
             List<Value<String>> newList = DBClientHelper.removePetId(valueList, petId);
             userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", newList).build();
-        }else{
+        }else if(operation.equals("add") && !list.contains(StringValue.of(petId))){
             list.add(StringValue.of(petId));
             userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", list).build();
+        }else{
+            return;
         }
 
         db.update(userEntity);
