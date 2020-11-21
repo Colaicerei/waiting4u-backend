@@ -87,7 +87,7 @@ public class PetDBClient {
         Entity petEntity = db.get(key);
         if(petEntity == null) return null;
         return new Pet.PetBuilder()
-                .setId(key.getId().toString())
+                .setId(key. getId().toString())
                 .setPetName(petEntity.getString("petName"))
                 .setDateOfBirth(petEntity.getTimestamp("dateOfBirth").toDate())
                 .setDateCreated(petEntity.getTimestamp("dateCreated").toDate())
@@ -197,11 +197,11 @@ public class PetDBClient {
 
         //DateTimeFormatter DTF = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
         //DateTime dt = DateTime.now(DateTimeZone.UTC);
-        System.out.println(Timestamp.of(past));
+        //System.out.println(Timestamp.of(past));
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(PETS_COLLECTION_NAME)
-                //.setFilter(StructuredQuery.PropertyFilter.ge("date_created", Timestamp.of(past)))
+                .setFilter(StructuredQuery.PropertyFilter.ge("dateCreated", Timestamp.of(past)))
                 .build();
         QueryResults<Entity> results = db.run(query);
 
