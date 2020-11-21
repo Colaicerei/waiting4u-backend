@@ -5,9 +5,6 @@ import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -194,10 +191,6 @@ public class PetDBClient {
     public List<Pet> getPetsByDays(int days) {
         Date date = new Date();
         Date past = new DateTime(date).minusDays(days).toDate();
-
-        //DateTimeFormatter DTF = DateTimeFormat.forPattern("yyyyMMddHHmmssSSS");
-        //DateTime dt = DateTime.now(DateTimeZone.UTC);
-        //System.out.println(Timestamp.of(past));
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(PETS_COLLECTION_NAME)
