@@ -19,8 +19,8 @@ public class MailController {
     @Autowired
     private EmailService emailService;
 
-    @Scheduled(cron = "0 * * * * ?") //test every minute
-    //@Scheduled(cron = "0 0 18 * * MON-FRI") //daily
+    //@Scheduled(cron = "0 * * * * ?") //test every minute
+    @Scheduled(cron = "0 0 18 * * MON-FRI") //daily
     public void sendmailDaily() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> dailyList = userDBClient.getUserEmails("Daily");
@@ -37,8 +37,8 @@ public class MailController {
         }
     }
 
-    @Scheduled(cron = "0 35 * * * ?") //test every hour
-    //@Scheduled(cron = "0 0 18 * * FRI")    //weekly
+    //@Scheduled(cron = "0 35 * * * ?") //test every hour
+    @Scheduled(cron = "0 0 18 * * FRI")    //weekly
     public void sendmailWeekly() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> weeklyList = userDBClient.getUserEmails("Weekly");
@@ -53,8 +53,8 @@ public class MailController {
         }
     }
 
-    @Scheduled(cron = "0 38 * * * ?") //test every hour
-    //@Scheduled(cron = "0 0 18 18 * ?")    //monthly
+    //@Scheduled(cron = "0 38 * * * ?") //test every hour
+    @Scheduled(cron = "0 0 18 18 * ?")    //monthly
     public void sendmailMonthly() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> monthlyList = userDBClient.getUserEmails("Monthly");
