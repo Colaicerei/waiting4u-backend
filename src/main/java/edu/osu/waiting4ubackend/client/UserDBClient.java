@@ -146,7 +146,7 @@ public class UserDBClient {
         if(operation.equals("remove") && list.contains(StringValue.of(petId))){
             List<Value<String>> newList = DBClientHelper.removePetId(valueList, petId);
             userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", newList).build();
-        }else if(operation.equals("add") && !list.contains(StringValue.of(petId))){
+        }else if(operation.equals("add") && petId != null && !list.contains(StringValue.of(petId))){
             list.add(StringValue.of(petId));
             userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", list).build();
         }else{
