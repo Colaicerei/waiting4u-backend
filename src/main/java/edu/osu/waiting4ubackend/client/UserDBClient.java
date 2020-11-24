@@ -56,7 +56,8 @@ public class UserDBClient {
                 .set("email", user.getEmail())
                 .set("password", user.getPassword())
                 .set("introduction", user.getIntroduction())
-                .set("preference", "Weekly")
+                .set("preference", user.getPreference())
+                .set("favoritePets", DBClientHelper.convertToValueList(user.getFavoritePets()))
                 .build();
         db.put(userEntity);
 
@@ -74,6 +75,7 @@ public class UserDBClient {
                 .setIntroduction(userEntity.getString("introduction"))
                 .setPassword(userEntity.getString("password"))
                 .setPreference(userEntity.getString("preference"))
+                .setFavoritePets(DBClientHelper.convertToList(userEntity.getList("favoritePets")))
                 .build();
     }
 
@@ -130,5 +132,27 @@ public class UserDBClient {
             }
             return userEmailList;
         }
+    }
+
+
+    public void updateFavoritePets(long userId, String petId, String operation) {
+        Key key = db.newKeyFactory().setKind(USERS_COLLECTION_NAME).newKey(userId);
+        Entity userEntity = db.get(key);
+        List<Value<String>> valueList = userEntity.getList("favoritePets");
+        System.out.println(valueList);
+        List<Value<String>> list = new ArrayList<>(valueList);
+
+        // if pet is not in the list, add it to the list, otherwise remove it from the list
+        if(operation.equals("remove") && list.contains(StringValue.of(petId))){
+            List<Value<String>> newList = DBClientHelper.removePetId(valueList, petId);
+            userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", newList).build();
+        }else if(operation.equals("add") && petId != null && !list.contains(StringValue.of(petId))){
+            list.add(StringValue.of(petId));
+            userEntity = Entity.newBuilder(db.get(key)).set("favoritePets", list).build();
+        }else{
+            return;
+        }
+
+        db.update(userEntity);
     }
 }

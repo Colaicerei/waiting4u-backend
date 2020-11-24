@@ -3,7 +3,6 @@ package edu.osu.waiting4ubackend.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.osu.waiting4ubackend.client.PetDBClient;
-import edu.osu.waiting4ubackend.client.PetSearchQueryBuilder;
 import edu.osu.waiting4ubackend.client.UserDBClient;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.entity.User;
@@ -14,7 +13,6 @@ import edu.osu.waiting4ubackend.response.UserRegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import edu.osu.waiting4ubackend.request.UserUpdateRequest;
 import edu.osu.waiting4ubackend.response.UserLoginResponse;
@@ -22,6 +20,8 @@ import edu.osu.waiting4ubackend.response.UserLoginResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.validation.Errors;
@@ -87,7 +87,7 @@ public class UserController {
             return new ResponseEntity<>("{\"Error\":  \"The user doesn't exist\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference(), user.getFavoritePets());
         return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
     }
 
@@ -125,8 +125,49 @@ public class UserController {
         }
 
         String userId = userDBClient.updateUser(user, id);
+        return getUser(Long.parseLong(userId));
+    }
+
+
+    @CrossOrigin
+    @PutMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> addFavoritePet(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
+        //add to favoritePets
+        UserDBClient userDBClient = new UserDBClient();
+        userDBClient.updateFavoritePets(userId, petId, "add");
+        return getUser(userId);
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> removePetFromFavorites(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
+        //add to favoritePets
+        UserDBClient userDBClient = new UserDBClient();
+        userDBClient.updateFavoritePets(userId, petId, "remove");
+        return getUser(userId);
+    }
+
+    // user view - get favorite pets
+    @CrossOrigin
+    @GetMapping(value = "/users/{user_id}/favorites", produces = "application/json")
+    public ResponseEntity<String> getFavoritePets(@PathVariable("user_id") long id) throws JsonProcessingException {
+        //check valid admin id
+        UserDBClient userDbClient = new UserDBClient();
+        User user = userDbClient.getUserById(id);
+        if(user == null) {
+            return new ResponseEntity<>("{\"Error\":  \"Unauthorized user\"}", HttpStatus.NOT_FOUND);
+        }
+        List<String> petIdList = user.getFavoritePets();
+        List<Pet> petList = new ArrayList<>();
+        PetDBClient petDbClient = new PetDBClient();
+        for(String petId: petIdList){
+            Pet pet = petDbClient.getPetById(Long.parseLong(petId));
+            // delete pets should also remove it from user wishlist, but have not been implemented yet
+            if(pet != null) {
+                petList.add(pet);
+            }
+        }
         ObjectMapper objectMapper = new ObjectMapper();
-        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getIntroduction(), user.getPreference());
-        return new ResponseEntity<>(objectMapper.writeValueAsString(getUserResponse), HttpStatus.OK);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(petList), HttpStatus.OK);
     }
 }

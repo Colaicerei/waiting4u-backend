@@ -12,13 +12,15 @@ public class GetUserResponse {
     private String email;
     private String introduction;
     private String preference;
+    private List<String> favoritePets;
 
-    public GetUserResponse(String id, String userName, String email, String introduction, String preference) {
+    public GetUserResponse(String id, String userName, String email, String introduction, String preference, List<String> favoritePets) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.introduction = introduction;
         this.preference = preference;
+        this.favoritePets = favoritePets;
     }
 
     public String getId() {
@@ -38,4 +40,6 @@ public class GetUserResponse {
     public String getPreference() {
         return preference;
     }
+
+    public List<String> getFavoritePets() { return favoritePets; }
 }

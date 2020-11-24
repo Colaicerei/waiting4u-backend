@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import edu.osu.waiting4ubackend.entity.Pet;
 import edu.osu.waiting4ubackend.response.GetUpdatesResponse;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,5 +185,23 @@ public class PetDBClient {
             DBClientHelper.populateQueryResults(petList, results);
             return petList;
         }
+    }
+
+    // https://stackoverflow.com/questions/11882926/how-to-subtract-x-day-from-a-date-object-in-java
+    public List<Pet> getPetsByDays(int days) {
+        Date date = new Date();
+        Date past = new DateTime(date).minusDays(days).toDate();
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind(PETS_COLLECTION_NAME)
+                .setFilter(StructuredQuery.PropertyFilter.ge("dateCreated", Timestamp.of(past)))
+                .build();
+        QueryResults<Entity> results = db.run(query);
+
+        List<Pet> petList = new ArrayList<>();
+        if (results.hasNext()) {
+            DBClientHelper.populateQueryResults(petList, results);
+        }
+        return petList;
     }
 }

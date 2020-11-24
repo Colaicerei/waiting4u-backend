@@ -19,8 +19,8 @@ public class MailController {
     @Autowired
     private EmailService emailService;
 
-    @Scheduled(cron = "0 * * * * ?") //test every minute
-    //@Scheduled(cron = "0 0 18 * * MON-FRI") //daily
+    //@Scheduled(cron = "0 * * * * ?") //test every minute
+    @Scheduled(cron = "0 0 18 * * MON-FRI") //daily
     public void sendmailDaily() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> dailyList = userDBClient.getUserEmails("Daily");
@@ -29,15 +29,16 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> dailyPetList = petDBClient.getPets();
+        List<Pet> dailyPetList = petDBClient.getPetsByDays(1);
+
         for (String email : dailyList) {
             emailService.sendMail(email, "Daily updates", dailyPetList);
             System.out.println("daily email sent to " + email);
         }
     }
 
-    @Scheduled(cron = "0 35 * * * ?") //test every hour
-    //@Scheduled(cron = "0 0 18 * * FRI")    //weekly
+    //@Scheduled(cron = "0 35 * * * ?") //test every hour
+    @Scheduled(cron = "0 0 18 * * FRI")    //weekly
     public void sendmailWeekly() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> weeklyList = userDBClient.getUserEmails("Weekly");
@@ -46,14 +47,14 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> weeklyPetList = petDBClient.getPets();
+        List<Pet> weeklyPetList = petDBClient.getPetsByDays(7);
         for (String email : weeklyList) {
             emailService.sendMail(email, "Weekly updates", weeklyPetList);
         }
     }
 
-    @Scheduled(cron = "0 38 * * * ?") //test every hour
-    //@Scheduled(cron = "0 0 18 18 * ?")    //monthly
+    //@Scheduled(cron = "0 38 * * * ?") //test every hour
+    @Scheduled(cron = "0 0 18 18 * ?")    //monthly
     public void sendmailMonthly() throws MessagingException {
         UserDBClient userDBClient = new UserDBClient();
         List<String> monthlyList = userDBClient.getUserEmails("Monthly");
@@ -62,7 +63,7 @@ public class MailController {
             return;
         }
         PetDBClient petDBClient = new PetDBClient();
-        List<Pet> monthlyPetList = petDBClient.getPets();
+        List<Pet> monthlyPetList = petDBClient.getPetsByDays(30);
         for (String email : monthlyList) {
             emailService.sendMail(email, "Monthly updates", monthlyPetList);
             System.out.println("monthly email sent to " + email);
