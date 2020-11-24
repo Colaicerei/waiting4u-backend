@@ -130,7 +130,7 @@ public class UserController {
 
 
     @CrossOrigin
-    @PutMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/users/{user_id}/pets/{pet_id}", produces = "application/json")
     public ResponseEntity<String> addFavoritePet(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
         //add to favoritePets
         UserDBClient userDBClient = new UserDBClient();
@@ -139,7 +139,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @DeleteMapping(value = "/users/{user_id}/pets/{pet_id}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/users/{user_id}/pets/{pet_id}", produces = "application/json")
     public ResponseEntity<String> removePetFromFavorites(@PathVariable("user_id") long userId, @PathVariable("pet_id")String petId) throws JsonProcessingException {
         //add to favoritePets
         UserDBClient userDBClient = new UserDBClient();
