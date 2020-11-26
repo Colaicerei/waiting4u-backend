@@ -23,7 +23,6 @@ public class ControllerHelper {
         }
         exceptionMessage += "\"}";
 
-        ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
 

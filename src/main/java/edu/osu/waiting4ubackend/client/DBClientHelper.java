@@ -53,6 +53,7 @@ public class DBClientHelper {
     }
 
     public static List<Value<String>> removePetId(List<Value<String>> list, String id) {
+        if(list == null) return null;
         List<Value<String>> newList = new ArrayList<>();
         for(Value<String> v : list) {
             if(!v.get().equals(id)) {
@@ -80,13 +81,13 @@ public class DBClientHelper {
         }
     }
 
-    public static void sortByDateCreadted(List<Pet> petList) {
-        Collections.sort(petList, new Comparator<Pet>(){
+    public static void sortByDateCreated(List<Pet> petList) {
+        petList.sort(new Comparator<Pet>() {
             @Override
             public int compare(Pet p1, Pet p2) {
                 long date1 = p1.getDateCreated().getTime();
                 long date2 = p2.getDateCreated().getTime();
-                if(date1 == date2) {
+                if (date1 == date2) {
                     return 0;
                 }
                 return date2 < date1 ? -1 : 1;

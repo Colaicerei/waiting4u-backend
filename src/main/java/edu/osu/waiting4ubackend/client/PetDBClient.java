@@ -52,20 +52,6 @@ public class PetDBClient {
                 .build();
     }
 
-//    public List<Pet> getPets() {
-//        Query<Entity> query = Query.newEntityQueryBuilder()
-//                .setKind(PETS_COLLECTION_NAME)
-//                .build();
-//        QueryResults<Entity> results = db.run(query);
-//        if(!results.hasNext()) {
-//            return null;
-//        } else {
-//            List<Pet> petList = new ArrayList<>();
-//            DBClientHelper.populateQueryResults(petList, results);
-//            return petList;
-//        }
-//    }
-
     public List<Pet> getPetsByAdmin(String adminId) {
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind(PETS_COLLECTION_NAME)
@@ -146,7 +132,7 @@ public class PetDBClient {
         } else {
             List<Pet> petList = new ArrayList<>();
             DBClientHelper.populateQueryResults(petList, results);
-            DBClientHelper.sortByDateCreadted(petList);
+            DBClientHelper.sortByDateCreated(petList);
             return petList;
         }
     }
