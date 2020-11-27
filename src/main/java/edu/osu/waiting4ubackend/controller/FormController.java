@@ -30,6 +30,7 @@ public class FormController {
             subject += " regarding " + contactRequest.getPetName();
         }
         emailService.sendContactForm(subject, contactRequest.getEmail(), contactRequest.getMessage());
+        emailService.autoReply(contactRequest.getName(), contactRequest.getEmail());
         ObjectMapper objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(contactRequest), HttpStatus.OK);
     }

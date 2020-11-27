@@ -65,9 +65,24 @@ public class EmailService {
         contactMessage.setSubject(subject);
         contactMessage.setText("message from " + sender + ":\n" + body);
 
-        contactMessage.setFrom(sender);
+        contactMessage.setFrom("waiting4u.service@gmail.com");
 
         javaMailSender.send(contactMessage);
     }
+
+    // auto reply upon contact form submission
+    public void autoReply(String senderName, String senderEmail) {
+        SimpleMailMessage replyMessage = new SimpleMailMessage();
+
+        replyMessage.setTo(senderEmail);
+        replyMessage.setSubject("Successful form submission");
+        replyMessage.setText("Hi " + senderName + ":\n" +
+                               "We have received your message and will get back to your shortly.");
+
+        replyMessage.setFrom("waiting4u.service@gmail.com");
+
+        javaMailSender.send(replyMessage);
+    }
+
 }
 
