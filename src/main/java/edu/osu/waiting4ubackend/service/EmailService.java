@@ -5,12 +5,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
+
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -54,6 +54,20 @@ public class EmailService {
         helper.setText(process, true);
 
         javaMailSender.send(mimeMessage);
+    }
+
+
+    // forward the contact form submission to our service email
+    public void sendContactForm(String subject, String sender, String body) {
+        SimpleMailMessage contactMessage = new SimpleMailMessage();
+
+        contactMessage.setTo("waiting4u.service@gmail.com");
+        contactMessage.setSubject(subject);
+        contactMessage.setText("message from " + sender + ":\n" + body);
+
+        contactMessage.setFrom(sender);
+
+        javaMailSender.send(contactMessage);
     }
 }
 
