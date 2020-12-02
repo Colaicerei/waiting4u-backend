@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Entity for Pet class
  */
 public class Pet {
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
     @JsonProperty("pet_id")
     private String id;
     @JsonProperty("pet_name")
@@ -25,7 +25,7 @@ public class Pet {
     private Date dateCreated;
     private Date dateUpdated;
     private String availability = "Available";
-    private List<String> status = new ArrayList<>();;
+    private List<String> status = Collections.singletonList(SDF.format(new Date()) + " A new pet joins us!");
     private String description;
     @JsonProperty("admin_id")
     private String adminId;
@@ -101,7 +101,9 @@ public class Pet {
     }
 
     public void setStatus(List<String> list) {
-        if(list != null) {
+        if(list == null || list.isEmpty()) {
+            status = Collections.singletonList(SDF.format(new Date()) + " A new pet joins us!");
+        } else {
             status = list;
         }
     }
