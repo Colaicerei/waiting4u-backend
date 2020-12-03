@@ -79,7 +79,7 @@ public class AdminController {
         Admin admin = adminDbClient.getAdminById(id);
         //check valid admin id
         if(admin == null) {
-            return new ResponseEntity<>("{\"Error\":  \"Unauthorized user\"}", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("{\"Error\":  \"User not found\"}", HttpStatus.NOT_FOUND);
         }
         ObjectMapper objectMapper = new ObjectMapper();
         GetAdminResponse getAdminResponse = new GetAdminResponse(admin.getId(), admin.getUserName(), admin.getEmail(), admin.getPets());
